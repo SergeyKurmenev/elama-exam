@@ -14,6 +14,19 @@ class Post(db.Model):
     is_draft = db.Column(db.Boolean, nullable=False)
     tag = db.Column(db.String(Config.TAG_MAX_LENGTH), nullable=True)
 
+    def __init__(self,
+                 user_id: int,
+                 title: str,
+                 body: str,
+                 is_draft: bool = False,
+                 tag: str = None):
+
+        self.user_id = user_id
+        self.title = title
+        self.body = body
+        self.is_draft = is_draft
+        self.tag = tag
+
 
 class Comment(db.Model):
 
