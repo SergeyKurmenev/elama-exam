@@ -38,6 +38,17 @@ class Comment(db.Model):
     name = db.Column(db.string(Config.COMMENT_TITLE_MAX_LENGTH), nullable=False)
     body = db.Column(db.Text, nullable=False)
 
+    def __init__(self,
+                 post_id: int,
+                 email: str,
+                 name: str,
+                 body: str):
+
+        self.post_id = post_id
+        self.email = email
+        self.name = name
+        self.body = body
+
 
 class Category(db.Model):
 
