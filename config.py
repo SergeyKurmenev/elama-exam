@@ -4,5 +4,6 @@ class Config(object):
 
     COMMENT_TITLE_MAX_LENGTH = 100
 
+    CATEGORY_NAME_MAX_LENGTH = 100
     TAG_MAX_LENGTH = 25
 
