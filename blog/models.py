@@ -25,3 +25,12 @@ class Comment(db.Model):
     name = db.Column(db.string(Config.COMMENT_TITLE_MAX_LENGTH), nullable=False)
     body = db.Column(db.Text, nullable=False)
 
+
+class Category(db.Model):
+
+    __tablename__ = 'categories'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.string(Config.CATEGORY_NAME_MAX_LENGTH), nullable=False)
+    tag = db.Column(db.String(Config.TAG_MAX_LENGTH), nullable=True)
+
