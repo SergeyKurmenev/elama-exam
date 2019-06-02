@@ -35,7 +35,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    name = db.Column(db.string(Config.COMMENT_TITLE_MAX_LENGTH), nullable=False)
+    name = db.Column(db.String(Config.COMMENT_TITLE_MAX_LENGTH), nullable=False)
     body = db.Column(db.Text, nullable=False)
 
     def __init__(self,
@@ -55,7 +55,7 @@ class Category(db.Model):
     __tablename__ = 'categories'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.string(Config.CATEGORY_NAME_MAX_LENGTH), nullable=False)
+    name = db.Column(db.String(Config.CATEGORY_NAME_MAX_LENGTH), nullable=False)
     tag = db.Column(db.String(Config.TAG_MAX_LENGTH), nullable=True)
 
     def __init__(self,
