@@ -58,3 +58,10 @@ class Category(db.Model):
     name = db.Column(db.string(Config.CATEGORY_NAME_MAX_LENGTH), nullable=False)
     tag = db.Column(db.String(Config.TAG_MAX_LENGTH), nullable=True)
 
+    def __init__(self,
+                 name: str,
+                 tag: str):
+
+        self.name = name
+        self.tag = tag
+
