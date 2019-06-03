@@ -35,3 +35,25 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
         db.session.rollback()
         raise Exception(str(e))
 
+
+def get_all_posts():
+    """Метод получения всех постов из БД.
+
+    Возвращает список всех постов(список объектов Post),
+    не отмеченных как "черновик".
+
+    [ {id:       int,
+      user_id:   int,
+      title:     str,
+      body:      str,
+      is_draft:  bool,
+      tag:       str
+      },
+      ... ,
+      {} ]
+
+    """
+
+    posts = Post.query.filter(Post.is_draft == False).all()
+    return posts
+
