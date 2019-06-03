@@ -76,3 +76,31 @@ def delete_posts(*args: int):
             # TODO: Добавить обработку исключений при попытке удалении поста
             pass
 
+
+def get_statistic():
+    """Метод получения статистики постов из БД.
+
+    Возвращает словарь из двух элементов: количество постов и количество черновиков.
+
+    {
+    post_count: int,
+    draft_count: int
+    }
+
+    """
+
+    statistic = {'post_count': 0,
+                 'draft_count': 0}
+
+    posts = Post.query.filter(Post.is_draft == False).all()
+    post_count = len(posts)
+
+    drafts = Post.query.filter(Post.is_draft == True).all()
+    draft_count = len(drafts)
+
+    statistic['post_count'] = post_count
+    statistic['draft_count'] = draft_count
+
+    # TODO: Добавить обработку исключений при попытках обращений к БД
+    return statistic
+
