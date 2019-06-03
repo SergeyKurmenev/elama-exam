@@ -45,3 +45,33 @@ def get_all_categories():
 
     return categories
 
+
+def change_category(category_id: int, name: str = None, tag: str = None):
+    """Метод редактирования категории.
+
+    В качестве входных параметров принимает список:
+    id категории(которую редактировать), name - новое имя, tag - новый тэг.
+
+    category_id:  int,
+    name:         str,
+    tag:          str
+
+    name - опционально(default=None - имя сохраняется старое)
+    tag - опционально(default=None - тэг сохраняется старый)
+
+    """
+
+    # TODO: Добавить обработку исключений при обращении к БД
+    category_for_change = Category.query.filter(Category.id == category_id).first()
+
+    if name:
+        category_for_change.name = name
+    if tag:
+        # TODO: Необходимо добавить метод для изменения тэгов на актуальные
+        #       во всех постах, которые ссылались на изменённый.(в posts.py)
+        category_for_change.tag = tag
+        # TODO: добавить вызов метода замены тэгов на актуальные для
+        #       ссылавшихся на изменённый тэг постов
+
+    db.session.commit()
+
