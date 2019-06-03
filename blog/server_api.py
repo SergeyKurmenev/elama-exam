@@ -7,6 +7,7 @@ from flask_restful import reqparse
 from blog import api
 
 from blog.db_utils.posts import add_post
+from blog.db_utils.posts import change_post_tag
 from blog.db_utils.posts import get_all_posts
 from blog.db_utils.posts import get_statistic
 
@@ -74,6 +75,32 @@ class Posts(Resource):
                  body=args['body'],
                  is_draft=bool(args['is_draft']),
                  tag=args['tag'])
+
+        return Response(status=200)
+
+    def put(self):
+        """PUT метод для добавления/редактирования тэга поста.
+
+        Принимает JSON с информацией для замены тэга.
+
+        {
+        'post_id': str,
+        'tag':     str
+        }
+
+        post_id - id поста для которого будет происходить смена тэга
+        tag - новый тэг поста(при отсутствии - будет записано null значение)
+
+        """
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('post_id')
+        parser.add_argument('tag')
+
+        args = parser.parse_args()
+
+        change_post_tag(post_id=int(args['post_id']),
+                        tag=args['tag'])
 
         return Response(status=200)
 
