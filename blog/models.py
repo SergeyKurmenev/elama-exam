@@ -27,6 +27,15 @@ class Post(db.Model):
         self.is_draft = is_draft
         self.tag = tag
 
+    def to_dict(self):
+        post = {'id': self.id,
+                'user_id': self.user_id,
+                'title': self.title,
+                'body': self.body,
+                'tag': self.tag}
+
+        return post
+
 
 class Comment(db.Model):
 
