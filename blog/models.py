@@ -83,3 +83,10 @@ class Category(db.Model):
         self.name = name
         self.tag = tag
 
+    def to_dict(self):
+        category = {'id': self.id,
+                    'name': self.name,
+                    'tag': self.tag}
+
+        return category
+
