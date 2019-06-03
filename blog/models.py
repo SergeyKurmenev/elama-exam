@@ -58,6 +58,15 @@ class Comment(db.Model):
         self.name = name
         self.body = body
 
+    def to_dict(self):
+        comment = {'id': self.id,
+                   'post_id': self.post_id,
+                   'email': self.email,
+                   'name': self.name,
+                   'body': self.body}
+
+        return comment
+
 
 class Category(db.Model):
 
