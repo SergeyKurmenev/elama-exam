@@ -22,3 +22,26 @@ def add_category(name: str, tag: str):
     db.session.add(category_for_add)
     db.session.commit()
 
+
+def get_all_categories():
+    """Метод получения списка всех категорий из БД.
+
+    Возвращает список всех категорий(список объектов Category).
+
+    [
+      {
+      id:    int,
+      name:  str,
+      tag:   str
+      },
+      ... ,
+      {}
+    ]
+
+    """
+
+    # TODO: Добавить обработку исключений при попытке запроса в БД
+    categories = Category.query.all()
+
+    return categories
+
