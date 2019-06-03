@@ -1,4 +1,5 @@
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import SQLAlchemyError
 
 from blog import db
 
@@ -56,4 +57,22 @@ def get_all_posts():
 
     posts = Post.query.filter(Post.is_draft == False).all()
     return posts
+
+
+def delete_posts(*args: int):
+    """Метод удаления постов из БД.
+
+    В качестве входных параметров принимает список id:int постов,
+    которые необходимо удалить.
+
+    """
+
+    for post_id in args:
+        try:
+            post = Post.query.filter(Post.id == post_id).first()
+            db.session.delete(post)
+            db.session.commit()
+        except SQLAlchemyError:
+            # TODO: Добавить обработку исключений при попытке удалении поста
+            pass
 
