@@ -83,7 +83,7 @@ def get_statistic():
     Возвращает словарь из двух элементов: количество постов и количество черновиков.
 
     {
-    post_count: int,
+    post_count:  int,
     draft_count: int
     }
 
