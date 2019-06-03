@@ -104,3 +104,21 @@ def get_statistic():
     # TODO: Добавить обработку исключений при попытках обращений к БД
     return statistic
 
+
+def change_post_tag(post_id: int, tag: str):
+    """Метод добавления/изменения тэга поста
+
+    В качестве входных параметров принимает список:
+    id поста(для которого производить замену) и новый тэг.
+
+    post_id:  int,
+    tag:      str
+
+    """
+
+    # TODO: Добавить обработку исключений при обращении к БД
+    post_for_change_tag = Post.query.filter(Post.id == post_id).first()
+    post_for_change_tag.tag = tag
+
+    db.session.commit()
+
