@@ -16,4 +16,5 @@ api = Api(app)
 
 
 from blog import models
+from blog import server_api
 
