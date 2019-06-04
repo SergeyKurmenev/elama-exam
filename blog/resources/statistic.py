@@ -29,3 +29,4 @@ class Statistic(Resource):
 
 
 api.add_resource(Statistic, '/api/v1/statistic')
+
