@@ -8,13 +8,13 @@ from blog.models import Comment
 def add_comment(post_id: int, email: str, name: str, body: str):
     """Метод добавления комментария.
 
-    Принимает словарь:
-    {
-    post_id:   int,
-    email:     str,
-    name:      str,
-    body:      bool,
-    }
+    Входные данные метода:
+
+    post_id - id поста к которому создаётся комментарий
+    email - email оставившего комментарий
+    name - имя оставившего комментарий
+    body - текст комментария
+
 
     """
 
