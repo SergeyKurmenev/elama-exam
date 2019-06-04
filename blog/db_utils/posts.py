@@ -1,6 +1,8 @@
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import SQLAlchemyError
 
+from loguru import logger
+
 from blog import db
 
 from blog.models import Post
@@ -69,12 +71,11 @@ def delete_posts(*args: int):
 
     for post_id in args:
         try:
-            post = Post.query.filter(Post.id == post_id).first()
+            post = Post.query.filter(Post.id == post_id).one()
             db.session.delete(post)
             db.session.commit()
-        except SQLAlchemyError:
-            # TODO: Добавить обработку исключений при попытке удалении поста
-            pass
+        except SQLAlchemyError as e:
+            logger.warning("Пост c id: {} не удалён. Причина: {}".format(post_id, e))
 
 
 def get_statistic():
