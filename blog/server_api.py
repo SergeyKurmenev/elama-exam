@@ -7,6 +7,7 @@ from flask_restful import reqparse
 from blog import api
 
 from blog.db_utils.comments import add_comment
+from blog.db_utils.comments import get_all_comments_for_post
 
 from blog.db_utils.posts import add_post
 from blog.db_utils.posts import change_post_tag
@@ -193,6 +194,44 @@ class Comments(Resource):
                     body=args['body'])
 
         return Response(status=200)
+
+    def get(self):
+        """GET запрос для получения всех комментариев поста.
+
+        Принимает JSON с id поста для которого
+        необходимо найти комментарии.
+
+        {
+        'post_id':  int
+        }
+
+        Возвращает JSON объект содержащий все комментарии из БД,
+        которые адресованы посту с id из запроса.
+        Каждый комментарий имеет вид определённый в методе `to_dict`
+        класса `Comment` в blog/models.py.
+
+        {
+        'id':       int,
+        'post_id':  int,
+        'email':    str,
+        'name':     str,
+        'body':     str
+        }
+
+        """
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('post_id')
+        args = parser.parse_args()
+
+        post_id = args['post_id']
+
+        comments = get_all_comments_for_post(post_id=post_id)
+        result = []
+        for comment in comments:
+            result.append(comment.to_dict())
+
+        return jsonify(result)
 
 
 api.add_resource(Comments, '/api/v1/comments')
