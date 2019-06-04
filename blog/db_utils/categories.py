@@ -2,6 +2,8 @@ from blog import db
 
 from blog.models import Category
 
+from blog.db_utils.posts import refresh_tag
+
 
 def add_category(name: str, tag: str):
     """Метод добавления новой категории в БД.
@@ -64,12 +66,18 @@ def change_category(category_id: int, name: str = None, tag: str = None):
     # TODO: Добавить обработку исключений при обращении к БД
     category_for_change = Category.query.filter(Category.id == category_id).first()
 
+    old_tag = None
+
     if name:
         category_for_change.name = name
     if tag:
+        old_tag = category_for_change.tag
         category_for_change.tag = tag
-        # TODO: добавить вызов метода замены тэгов на актуальные для
-        #       ссылавшихся на изменённый тэг постов
 
     db.session.commit()
+
+    if old_tag:
+        # обновление тэга во всех постах, которые на него ссылались
+        refresh_tag(old_tag=old_tag,
+                    new_tag=tag)
 
