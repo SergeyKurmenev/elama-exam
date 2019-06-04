@@ -30,3 +30,17 @@ def add_comment(post_id: int, email: str, name: str, body: str):
         db.session.rollback()
         raise Exception(str(e))
 
+
+def get_all_comments_for_post(post_id: int):
+    """Метод получения всех комментариев, адресованных определённому посту.
+
+    Входные данные метода:
+
+    post_id - id поста, для которого необходимо найти все комментарии.
+
+    """
+
+    # TODO: Добавить обработку исключений при обращении к БД
+    comments = Comment.query.filter(Comment.post_id == post_id).all()
+    return comments
+
