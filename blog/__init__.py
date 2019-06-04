@@ -17,4 +17,5 @@ api = Api(app)
 
 from blog import models
 from blog import server_api
+from blog.resources.posts import Posts
 
