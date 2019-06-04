@@ -93,11 +93,8 @@ def get_statistic():
     statistic = {'post_count': 0,
                  'draft_count': 0}
 
-    posts = Post.query.filter(Post.is_draft == False).all()
-    post_count = len(posts)
-
-    drafts = Post.query.filter(Post.is_draft == True).all()
-    draft_count = len(drafts)
+    post_count = Post.query.filter(Post.is_draft == False).count()
+    draft_count = Post.query.filter(Post.is_draft == True).count()
 
     statistic['post_count'] = post_count
     statistic['draft_count'] = draft_count
