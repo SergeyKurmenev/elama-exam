@@ -7,9 +7,9 @@
 virtualenv -p python3 ./venv
 source ./venv/bin/activate
 pip install -r requirements.txt
-log_file="./logs/virtualenv/venv.`date '+%Y-%m-%d_%H-%M'`.log"
 
 #Эта часть отвечает за создание лога
+log_file="./logs/virtualenv/venv.`date '+%Y-%m-%d_%H-%M'`.log"
 python --version >> ${log_file}
 echo >> ${log_file}
 echo '====================' >> ${log_file}
