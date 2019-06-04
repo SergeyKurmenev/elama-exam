@@ -13,29 +13,6 @@ from blog.db_utils.categories import get_all_categories
 from blog.db_utils.comments import add_comment
 from blog.db_utils.comments import get_all_comments_for_post
 
-from blog.db_utils.posts import get_statistic
-
-
-class Statistic(Resource):
-    """Класс для работы со статистикой."""
-
-    def get(self):
-        """GET запрос для получения статистики постов.
-
-        Возвращает JSON объект содержащий статистику
-        постов и черновиков в БД.
-
-        Статистика возвращается в виде:
-
-        {
-        'draft_count': int,
-        'post_count':  int
-        }
-
-        """
-        statistic = get_statistic()
-        return jsonify(statistic)
-
 
 class Comments(Resource):
     """Класс для работы с комментариями."""
@@ -196,5 +173,4 @@ class Categories(Resource):
 
 api.add_resource(Categories, '/api/v1/categories')
 api.add_resource(Comments, '/api/v1/comments')
-api.add_resource(Statistic, '/api/v1/statistic')
 
