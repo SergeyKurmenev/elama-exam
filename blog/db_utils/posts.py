@@ -93,13 +93,18 @@ def get_statistic():
     statistic = {'post_count': 0,
                  'draft_count': 0}
 
-    post_count = Post.query.filter(Post.is_draft == False).count()
-    draft_count = Post.query.filter(Post.is_draft == True).count()
+    try:
+        post_count = Post.query.filter(Post.is_draft == False).count()
+        statistic['post_count'] = post_count
+    except SQLAlchemyError as e:
+        logger.warning("Не удалось получить статистику по постам. Причина: {}".format(e))
 
-    statistic['post_count'] = post_count
-    statistic['draft_count'] = draft_count
+    try:
+        draft_count = Post.query.filter(Post.is_draft == True).count()
+        statistic['draft_count'] = draft_count
+    except SQLAlchemyError as e:
+        logger.warning("Не удалось получить статистику по черновикам. Причина: {}".format(e))
 
-    # TODO: Добавить обработку исключений при попытках обращений к БД
     return statistic
 
 
