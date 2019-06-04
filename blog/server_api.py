@@ -8,6 +8,7 @@ from blog import api
 
 from blog.db_utils.categories import change_category
 from blog.db_utils.categories import add_category
+from blog.db_utils.categories import get_all_categories
 
 from blog.db_utils.comments import add_comment
 from blog.db_utils.comments import get_all_comments_for_post
@@ -294,6 +295,28 @@ class Categories(Resource):
                         tag=args['tag'])
 
         return Response(status=200)
+
+    def get(self):
+        """GET запрос для получения всех существующих категорий.
+
+        Возвращает JSON объект содержащий все категории из БД.
+        Каждая категория имеет вид определённый в методе `to_dict`
+        класса `Category` в blog/models.py.
+
+        {
+        'id':    int,
+        'name':  str,
+        'tag':   str
+        }
+
+        """
+
+        categories = get_all_categories()
+        result = []
+        for category in categories:
+            result.append(category.to_dict())
+
+        return jsonify(result)
 
 
 api.add_resource(Categories, '/api/v1/categories')
