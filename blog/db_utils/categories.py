@@ -1,3 +1,7 @@
+from sqlalchemy.exc import SQLAlchemyError
+
+from loguru import logger
+
 from blog import db
 
 from blog.models import Category
@@ -40,10 +44,16 @@ def get_all_categories():
       {}
     ]
 
+    В случае ошибки при обращении к БД происходит
+    raise Exception с сообщением об ошибке.
+
     """
 
-    # TODO: Добавить обработку исключений при попытке запроса в БД
-    categories = Category.query.all()
+    try:
+        categories = Category.query.all()
+    except SQLAlchemyError as e:
+        logger.warning('Не удалось получить категории из БД. Причина: {}'.format(e))
+        raise Exception('Ошибка при попытке получить категории из БД')
 
     return categories
 
