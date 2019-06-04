@@ -122,3 +122,17 @@ def change_post_tag(post_id: int, tag: str):
 
     db.session.commit()
 
+
+def get_posts_with_tag(tag: str):
+    """Метод получения всех постов категории.
+
+    В качестве входного параметра принимает тэг категории
+    посты которой необходимо найти.
+
+    Возвращает список объектов класса Post, которые
+    отмечены данным тэгом.
+    """
+
+    posts = Post.query.filter(Post.tag == tag).all()
+    return posts
+
