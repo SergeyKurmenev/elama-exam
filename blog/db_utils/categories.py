@@ -90,3 +90,4 @@ def change_category(category_id: int, name: str = None, tag: str = None):
         # обновление тэга во всех постах, которые на него ссылались
         refresh_tag(old_tag=old_tag,
                     new_tag=tag)
+
