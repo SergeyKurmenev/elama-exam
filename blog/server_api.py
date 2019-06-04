@@ -6,6 +6,8 @@ from flask_restful import reqparse
 
 from blog import api
 
+from blog.db_utils.categories import add_category
+
 from blog.db_utils.comments import add_comment
 from blog.db_utils.comments import get_all_comments_for_post
 
@@ -234,6 +236,37 @@ class Comments(Resource):
         return jsonify(result)
 
 
+class Categories(Resource):
+    """Класс для работы с категориями."""
+
+    def post(self):
+        """POST запрос для создания категории.
+
+        Принимает JSON с информацией для создания категории.
+
+        {
+        'name':   str,
+        'tag':    str
+        }
+
+        name - название категории
+        tag - тэг, который будет использоваться для
+        причисления поста к данной категории
+
+        """
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('name')
+        parser.add_argument('tag')
+        args = parser.parse_args()
+
+        add_category(name=args['name'],
+                     tag=args['tag'])
+
+        return Response(status=200)
+
+
+api.add_resource(Categories, '/api/v1/categories')
 api.add_resource(Comments, '/api/v1/comments')
 api.add_resource(Posts, '/api/v1/posts')
 api.add_resource(Statistic, '/api/v1/statistic')
