@@ -6,6 +6,7 @@ from flask_restful import reqparse
 
 from blog import api
 
+from blog.db_utils.categories import change_category
 from blog.db_utils.categories import add_category
 
 from blog.db_utils.comments import add_comment
@@ -262,6 +263,35 @@ class Categories(Resource):
 
         add_category(name=args['name'],
                      tag=args['tag'])
+
+        return Response(status=200)
+
+    def put(self):
+        """PUT запрос для изменения категории.
+
+        Принимает JSON с информацией для изменения категории.
+
+        {
+        'category_id':  int,
+        'name':         str,
+        'tag':          str
+        }
+
+        category_id - id категории, которые необходимо изменить
+        name - опциональный параметр - новое название категории
+        tag - опциональный параметр - новый тэг категории
+
+        """
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('category_id')
+        parser.add_argument('name')
+        parser.add_argument('tag')
+        args = parser.parse_args()
+
+        change_category(category_id=args['category_id'],
+                        name=args['name'],
+                        tag=args['tag'])
 
         return Response(status=200)
 
