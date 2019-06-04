@@ -74,9 +74,8 @@ def delete_posts(*args: int):
             post = Post.query.filter(Post.id == post_id).one()
             db.session.delete(post)
             db.session.commit()
-        except SQLAlchemyError:
-            # TODO: Добавить обработку исключений при попытке удалении поста
-            pass
+        except SQLAlchemyError as e:
+            logger.warning("Пост c id: {} не удалён. Причина: {}".format(post_id, e))
 
 
 def get_statistic():
