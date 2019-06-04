@@ -67,8 +67,6 @@ def change_category(category_id: int, name: str = None, tag: str = None):
     if name:
         category_for_change.name = name
     if tag:
-        # TODO: Необходимо добавить метод для изменения тэгов на актуальные
-        #       во всех постах, которые ссылались на изменённый.(в posts.py)
         category_for_change.tag = tag
         # TODO: добавить вызов метода замены тэгов на актуальные для
         #       ссылавшихся на изменённый тэг постов
