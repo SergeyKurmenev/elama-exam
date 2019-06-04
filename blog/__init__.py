@@ -19,4 +19,5 @@ from blog import models
 from blog import server_api
 from blog.resources.posts import Posts
 from blog.resources.statistic import Statistic
+from blog.resources.comments import Comments
 
