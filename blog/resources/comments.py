@@ -87,3 +87,4 @@ class Comments(Resource):
 
 
 api.add_resource(Comments, '/api/v1/comments')
+
