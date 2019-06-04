@@ -136,3 +136,27 @@ def get_posts_with_tag(tag: str):
     posts = Post.query.filter(Post.tag == tag).all()
     return posts
 
+
+def refresh_tag(old_tag: str, new_tag: str):
+    """Вспомогательный метод для обновления тэгов в постах.
+
+    Входные параметры метода:
+
+    old_tag - тэг который необходимо заменить
+    new_tag - тэг на который необходимо заменить
+        при None значении - запись категории меняется
+        на null(без категории)
+
+    Метод используется после редактирования тэга
+    какой-либо категории для обновления тэга
+    в постах на актуальный.
+
+    """
+
+    posts = get_posts_with_tag(old_tag)
+
+    for post in posts:
+        post.tag = new_tag
+
+    db.session.commit()
+
