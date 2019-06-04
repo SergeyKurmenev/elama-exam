@@ -1,3 +1,7 @@
+from sqlalchemy.exc import SQLAlchemyError
+
+from loguru import logger
+
 from blog import db
 
 from blog.models import Category
@@ -42,8 +46,11 @@ def get_all_categories():
 
     """
 
-    # TODO: Добавить обработку исключений при попытке запроса в БД
-    categories = Category.query.all()
+    try:
+        categories = Category.query.all()
+    except SQLAlchemyError as e:
+        logger.warning('Не удалось получить категории из БД. Причина: {}'.format(e))
+        raise Exception('Ошибка при попытке получить категории из БД')
 
     return categories
 
@@ -80,4 +87,3 @@ def change_category(category_id: int, name: str = None, tag: str = None):
         # обновление тэга во всех постах, которые на него ссылались
         refresh_tag(old_tag=old_tag,
                     new_tag=tag)
-
