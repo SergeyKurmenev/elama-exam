@@ -82,12 +82,25 @@ class Categories(Resource):
         'tag':   str
         }
 
+        При невозможности получить категории из БД возвращает
+        словать с сообщением об ошибке:
+
+        {
+        'error':  str
+        }
+
         """
 
-        categories = get_all_categories()
         result = []
-        for category in categories:
-            result.append(category.to_dict())
+
+        try:
+            categories = get_all_categories()
+
+            for category in categories:
+                result.append(category.to_dict())
+
+        except Exception as e:
+            return jsonify({'error': str(e)})
 
         return jsonify(result)
 
