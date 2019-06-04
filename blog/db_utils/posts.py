@@ -90,8 +90,8 @@ def get_statistic():
 
     """
 
-    statistic = {'post_count': 0,
-                 'draft_count': 0}
+    statistic = {'post_count': None,
+                 'draft_count': None}
 
     try:
         post_count = Post.query.filter(Post.is_draft == False).count()
