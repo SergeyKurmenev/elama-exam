@@ -8,6 +8,7 @@ from blog import api
 
 from blog.db_utils.posts import add_post
 from blog.db_utils.posts import change_post_tag
+from blog.db_utils.posts import delete_posts
 from blog.db_utils.posts import get_all_posts
 from blog.db_utils.posts import get_statistic
 
@@ -101,6 +102,34 @@ class Posts(Resource):
 
         change_post_tag(post_id=int(args['post_id']),
                         tag=args['tag'])
+
+        return Response(status=200)
+
+    def delete(self):
+        """DELETE метод для удаления постов.
+
+        Принимает JSON с id постов, которые необходимо удалить.
+
+        {
+        'posts_id':  str
+        }
+
+        posts_id - id постов для удаления.
+            Возможно удаление одного или нескольких постов.
+            Для удаления нескольких постов - в posts_id необходимо
+            передать строку с перечислением id постов разделённых с помощью ','.
+            {
+            'posts_id': '34,45,67,89,2'
+            }
+
+        """
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('posts_id')
+        args = parser.parse_args()
+
+        separated_posts_id = args['posts_id'].replace(' ', '').split(',')
+        delete_posts(*separated_posts_id)
 
         return Response(status=200)
 
