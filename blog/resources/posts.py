@@ -28,8 +28,28 @@ class Posts(Resource):
         'tag':      str
         }
 
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+
         """
-        posts = get_all_posts()
+
+        try:
+            posts = get_all_posts()
+
+        except Exception as e:
+            response = jsonify({'status': str(e)})
+            response.status_code = 503
+
+            return response
+
         result = []
         for post in posts:
             result.append(post.to_dict())
