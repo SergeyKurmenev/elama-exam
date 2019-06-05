@@ -1,4 +1,7 @@
+from loguru import logger
+
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import SQLAlchemyError
 
 from blog import db
 
@@ -38,9 +41,17 @@ def get_all_comments_for_post(post_id: int):
 
     post_id - id поста, для которого необходимо найти все комментарии.
 
+    В случае ошибки при обращении к БД происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
+
     """
 
-    # TODO: Добавить обработку исключений при обращении к БД
-    comments = Comment.query.filter(Comment.post_id == post_id).all()
+    try:
+        comments = Comment.query.filter(Comment.post_id == post_id).all()
+    except SQLAlchemyError as e:
+        logger.warning('Не удалось получить комментарии адресованные посту с id: {}. '
+                       'Причина: {}.'.format(post_id, str(e)))
+        raise Exception('БД временно недоступна')
+
     return comments
 
