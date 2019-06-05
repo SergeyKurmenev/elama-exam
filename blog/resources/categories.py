@@ -4,8 +4,6 @@ from flask import Response
 from flask_restful import Resource
 from flask_restful import reqparse
 
-from blog import api
-
 from blog.db_utils.categories import change_category
 from blog.db_utils.categories import add_category
 from blog.db_utils.categories import get_all_categories
@@ -103,7 +101,4 @@ class Categories(Resource):
             return jsonify({'error': str(e)})
 
         return jsonify(result)
-
-
-api.add_resource(Categories, '/api/v1/categories')
 
