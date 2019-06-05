@@ -68,6 +68,17 @@ class Comments(Resource):
         'body':     str
         }
 
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+
         """
 
         parser = reqparse.RequestParser()
@@ -76,7 +87,15 @@ class Comments(Resource):
 
         post_id = args['post_id']
 
-        comments = get_all_comments_for_post(post_id=post_id)
+        try:
+            comments = get_all_comments_for_post(post_id=post_id)
+
+        except Exception as e:
+            response = jsonify({'status': str(e)})
+            response.status_code = 503
+
+            return response
+
         result = []
         for comment in comments:
             result.append(comment.to_dict())
