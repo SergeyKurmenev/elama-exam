@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
 from loguru import logger
@@ -19,14 +20,28 @@ def add_category(name: str, tag: str):
     tag:   str
     }
 
+    При невозможности записи в БД просиходит raise Exception
+    с сообщением, соответствующим причине ошибки.
+
     """
 
     category_for_add = Category(name=name,
                                 tag=tag)
 
-    # TODO: Добавить обработку исключений при попытке добавления в бд
     db.session.add(category_for_add)
-    db.session.commit()
+
+    try:
+        db.session.commit()
+
+    except IntegrityError as e:
+        db.session.rollback()
+        logger.warning('Не удалось добавить новую категорию в БД. Причина: {}'.format(e))
+        raise Exception('Не корректные данные, возможно такая категория или тэг уже заняты')
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logger.warning('Не удалось добавить новую категорию в БД. Причина: {}'.format(e))
+        raise Exception('БД временно недоступна')
 
 
 def get_all_categories():
