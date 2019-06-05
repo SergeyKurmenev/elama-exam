@@ -58,9 +58,18 @@ def get_all_posts():
       ... ,
       {} ]
 
+    В случае ошибки при обращении к БД происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
+
     """
 
-    posts = Post.query.filter(Post.is_draft == False).all()
+    try:
+        posts = Post.query.filter(Post.is_draft == False).all()
+    except SQLAlchemyError as e:
+        logger.warning('Ошибка при попытке получить все посты из БД. '
+                       'Причина: {}.'.format(str(e)))
+        raise Exception('БД временно недоступна')
+
     return posts
 
 
