@@ -1,6 +1,8 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
+from sqlalchemy.orm.exc import NoResultFound
+
 from loguru import logger
 
 from blog import db
@@ -86,20 +88,39 @@ def change_category(category_id: int, name: str = None, tag: str = None):
     name - опционально(default=None - имя сохраняется старое)
     tag - опционально(default=None - тэг сохраняется старый)
 
+    В случае ошибки при обращении к БД происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
+
     """
 
-    # TODO: Добавить обработку исключений при обращении к БД
-    category_for_change = Category.query.filter(Category.id == category_id).first()
+    try:
+        category_for_change = Category.query.filter(Category.id == category_id).one()
 
-    old_tag = None
+        old_tag = None
 
-    if name:
-        category_for_change.name = name
-    if tag:
-        old_tag = category_for_change.tag
-        category_for_change.tag = tag
+        if name:
+            category_for_change.name = name
+        if tag:
+            old_tag = category_for_change.tag
+            category_for_change.tag = tag
 
-    db.session.commit()
+        db.session.commit()
+
+    except NoResultFound as e:
+        logger.warning('Редактирование категории с id: {} не удалось. '
+                       'Причина: категория не найдена. Error massage: "{}"'.format(category_id, str(e)))
+        raise Exception('Категория с данным id не найдена в БД')
+
+    except IntegrityError as e:
+        logger.warning('Редактирование категории с id: {} не удалось. '
+                       'Причина: не корректные данные. Error massage: "{}"'.format(category_id, str(e)))
+        raise Exception('Ошибка при попытке редактирования. '
+                        'Возможно данное имя или тэг уже заняты.')
+
+    except SQLAlchemyError as e:
+        logger.warning('Редактирование категории с id: {} не удалось. '
+                       'Причина: "{}"'.format(category_id, str(e)))
+        raise Exception('БД временно недоступна')
 
     if old_tag:
         # обновление тэга во всех постах, которые на него ссылались
