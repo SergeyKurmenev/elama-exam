@@ -167,9 +167,19 @@ def get_posts_with_tag(tag: str):
 
     Возвращает список объектов класса Post, которые
     отмечены данным тэгом.
+
+    В случае ошибки при обращении к БД происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
+
     """
 
-    posts = Post.query.filter(Post.tag == tag).all()
+    try:
+        posts = Post.query.filter(Post.tag == tag).all()
+    except SQLAlchemyError as e:
+        logger.warning('Не удалось получить посты, отмеченные тэгом: {}. '
+                       'Причина: {}.'.format(tag, str(e)))
+        raise Exception('БД временно недоступна')
+
     return posts
 
 
