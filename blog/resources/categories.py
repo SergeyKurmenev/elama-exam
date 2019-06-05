@@ -26,6 +26,19 @@ class Categories(Resource):
         tag - тэг, который будет использоваться для
         причисления поста к данной категории
 
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+        При ошибке записи - 409
+        При успешной записи - 201
+
         """
 
         parser = reqparse.RequestParser()
@@ -33,10 +46,21 @@ class Categories(Resource):
         parser.add_argument('tag')
         args = parser.parse_args()
 
-        add_category(name=args['name'],
-                     tag=args['tag'])
+        try:
+            add_category(name=args['name'],
+                         tag=args['tag'])
 
-        return Response(status=200)
+        except Exception as e:
+            response = jsonify({'status': str(e)})
+
+            if str(e) == 'БД временно недоступна':
+                response.status_code = 503
+            else:
+                response.status_code = 409
+
+            return response
+
+        return Response(status=201)
 
     def put(self):
         """PUT запрос для изменения категории.
