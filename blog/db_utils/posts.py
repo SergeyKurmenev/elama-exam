@@ -197,12 +197,24 @@ def refresh_tag(old_tag: str, new_tag: str):
     какой-либо категории для обновления тэга
     в постах на актуальный.
 
+    В случае ошибки выводит информацию о причине
+    в консоль с помощью logger.
+
     """
 
-    posts = get_posts_with_tag(old_tag)
+    try:
+        posts = get_posts_with_tag(old_tag)
 
-    for post in posts:
-        post.tag = new_tag
+        for post in posts:
+            post.tag = new_tag
 
-    db.session.commit()
+        db.session.commit()
+
+    except SQLAlchemyError as e:
+        logger.warning('Не удалось обновить тэги постам, отмеченным тэгом: {}. '
+                       'Причина: {}.'.format(old_tag, str(e)))
+
+    except Exception as e:
+        logger.warning('Не удалось обновить тэги постам, отмеченным тэгом: {}. '
+                       'Причина: {}.'.format(old_tag, str(e)))
 
