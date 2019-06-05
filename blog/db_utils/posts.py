@@ -123,6 +123,9 @@ def change_post_tag(post_id: int, tag: str):
     post_id:  int,
     tag:      str
 
+    tag - в случае None значения - у поста будет удалён тэг
+        (выставлено значение null - пост без категории)
+
     При невозможности смены тэга происходит raise Exceptions
     с сообщением соответствующим причине ошибки.
 
@@ -132,7 +135,8 @@ def change_post_tag(post_id: int, tag: str):
 
         # Проверка на существование категории с данным тэгом
         try:
-            Category.query.filter(Category.tag == tag).one()
+            if tag:
+                Category.query.filter(Category.tag == tag).one()
         except NoResultFound as e:
             logger.warning('Тэг для поста с id: {} не изменён. Причина: тэг {} не найден в БД. '
                            'Error massage: "{}"'.format(post_id, tag, str(e)))
