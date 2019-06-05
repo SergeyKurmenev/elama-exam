@@ -77,6 +77,19 @@ class Categories(Resource):
         name - опциональный параметр - новое название категории
         tag - опциональный параметр - новый тэг категории
 
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+        При ошибке записи - 409
+        При успешной записи - 201
+
         """
 
         parser = reqparse.RequestParser()
@@ -85,11 +98,23 @@ class Categories(Resource):
         parser.add_argument('tag')
         args = parser.parse_args()
 
-        change_category(category_id=args['category_id'],
-                        name=args['name'],
-                        tag=args['tag'])
+        try:
 
-        return Response(status=200)
+            change_category(category_id=args['category_id'],
+                            name=args['name'],
+                            tag=args['tag'])
+
+        except Exception as e:
+            response = jsonify({'status': str(e)})
+
+            if str(e) == 'БД временно недоступна':
+                response.status_code = 503
+            else:
+                response.status_code = 409
+
+            return response
+
+        return Response(status=201)
 
     def get(self):
         """GET запрос для получения всех существующих категорий.
