@@ -2,8 +2,6 @@ from flask import jsonify
 
 from flask_restful import Resource
 
-from blog import api
-
 from blog.db_utils.posts import get_statistic
 
 
@@ -26,7 +24,4 @@ class Statistic(Resource):
         """
         statistic = get_statistic()
         return jsonify(statistic)
-
-
-api.add_resource(Statistic, '/api/v1/statistic')
 

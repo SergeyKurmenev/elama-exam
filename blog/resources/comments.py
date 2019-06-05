@@ -4,8 +4,6 @@ from flask import Response
 from flask_restful import Resource
 from flask_restful import reqparse
 
-from blog import api
-
 from blog.db_utils.comments import add_comment
 from blog.db_utils.comments import get_all_comments_for_post
 
@@ -84,7 +82,4 @@ class Comments(Resource):
             result.append(comment.to_dict())
 
         return jsonify(result)
-
-
-api.add_resource(Comments, '/api/v1/comments')
 

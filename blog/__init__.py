@@ -16,8 +16,14 @@ api = Api(app)
 
 
 from blog import models
+
+from blog.resources.categories import Categories
+from blog.resources.comments import Comments
 from blog.resources.posts import Posts
 from blog.resources.statistic import Statistic
-from blog.resources.comments import Comments
-from blog.resources.categories import Categories
+
+api.add_resource(Categories, '/api/v1/categories')
+api.add_resource(Comments, '/api/v1/comments')
+api.add_resource(Posts, '/api/v1/posts')
+api.add_resource(Statistic, '/api/v1/statistic')
 
