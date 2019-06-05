@@ -1,10 +1,13 @@
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import SQLAlchemyError
 
+from sqlalchemy.orm.exc import NoResultFound
+
 from loguru import logger
 
 from blog import db
 
+from blog.models import Category
 from blog.models import Post
 
 
@@ -114,19 +117,42 @@ def get_statistic():
 def change_post_tag(post_id: int, tag: str):
     """Метод добавления/изменения тэга поста
 
-    В качестве входных параметров принимает список:
+    В качестве входных параметров принимает:
     id поста(для которого производить замену) и новый тэг.
 
     post_id:  int,
     tag:      str
 
+    При невозможности смены тэга происходит raise Exceptions
+    с сообщением соответствующим причине ошибки.
+
     """
 
-    # TODO: Добавить обработку исключений при обращении к БД
-    post_for_change_tag = Post.query.filter(Post.id == post_id).first()
-    post_for_change_tag.tag = tag
+    try:
 
-    db.session.commit()
+        # Проверка на существование категории с данным тэгом
+        try:
+            Category.query.filter(Category.tag == tag).one()
+        except NoResultFound as e:
+            logger.warning('Тэг для поста с id: {} не изменён. Причина: тэг {} не найден в БД. '
+                           'Error massage: "{}"'.format(post_id, tag, str(e)))
+            raise Exception('Данный тэг не найден в БД. '
+                            'Проверьте правильность написания тэга или создайте новую категорию')
+
+        # Проверка на существование поста с данным id и замена его тэга на новый
+        try:
+            post_for_change_tag = Post.query.filter(Post.id == post_id).one()
+            post_for_change_tag.tag = tag
+        except NoResultFound as e:
+            logger.warning('Тэг для поста с id: {} не изменён. Причина: пост не найден. '
+                           'Error massage: "{}"'.format(post_id, str(e)))
+            raise Exception('Пост с данным id не найден в БД')
+
+        db.session.commit()
+
+    except SQLAlchemyError as e:
+        logger.warning('Тэг для поста с id: {} не изменён. Причина: {}'.format(post_id, e))
+        raise Exception('БД временно недоступна')
 
 
 def get_posts_with_tag(tag: str):
