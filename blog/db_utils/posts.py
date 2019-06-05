@@ -103,6 +103,9 @@ def get_statistic():
     В случае возникновения ошибки при обращении к БД - вмето значения,
     которое не удалось получить подставляется None значение.
 
+    При невозможности смены тэга происходит raise Exceptions
+    с сообщением соответствующим причине ошибки.
+
     """
 
     statistic = {'post_count': None,
@@ -111,14 +114,13 @@ def get_statistic():
     try:
         post_count = Post.query.filter(Post.is_draft == False).count()
         statistic['post_count'] = post_count
-    except SQLAlchemyError as e:
-        logger.warning("Не удалось получить статистику по постам. Причина: {}".format(e))
 
-    try:
         draft_count = Post.query.filter(Post.is_draft == True).count()
         statistic['draft_count'] = draft_count
+
     except SQLAlchemyError as e:
-        logger.warning("Не удалось получить статистику по черновикам. Причина: {}".format(e))
+        logger.warning("Не удалось получить статистику. Причина: {}".format(e))
+        raise Exception('БД временно недоступна')
 
     return statistic
 
