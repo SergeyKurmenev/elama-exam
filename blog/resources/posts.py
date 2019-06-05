@@ -4,8 +4,6 @@ from flask import Response
 from flask_restful import Resource
 from flask_restful import reqparse
 
-from blog import api
-
 from blog.db_utils.posts import add_post
 from blog.db_utils.posts import change_post_tag
 from blog.db_utils.posts import delete_posts
@@ -131,7 +129,4 @@ class Posts(Resource):
         delete_posts(*separated_posts_id)
 
         return Response(status=200)
-
-
-api.add_resource(Posts, '/api/v1/posts')
 
