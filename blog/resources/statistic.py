@@ -21,7 +21,26 @@ class Statistic(Resource):
         'post_count':  int
         }
 
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+
         """
-        statistic = get_statistic()
+
+        try:
+            statistic = get_statistic()
+        except Exception as e:
+            response = jsonify({'status': str(e)})
+            response.status_code = 503
+
+            return response
+
         return jsonify(statistic)
 
