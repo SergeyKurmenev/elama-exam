@@ -1,30 +1,39 @@
-from urllib.request import urlopen
 import json
 
-from blog.db_utils.posts import add_post
+from urllib.request import urlopen
 
-from blog.db_utils.comments import add_comment
+from sqlalchemy.exc import SQLAlchemyError
+
+from blog import db
+
+from blog.models import Post
+from blog.models import Comment
 
 posts_url = "https://jsonplaceholder.typicode.com/posts"
 comments_url = "https://jsonplaceholder.typicode.com/comments"
 
-count = 1
 posts = json.loads(urlopen(posts_url).read())
-for post in posts:
-    add_post(user_id=post['userId'],
-             title=post['title'],
-             body=post['body'])
-    print('post {} done'.format(count))
-    count += 1
-
-
-count = 1
 comments = json.loads(urlopen(comments_url).read())
+
+for post in posts:
+    post_for_add = Post(user_id=post['userId'],
+                        title=post['title'],
+                        body=post['body'])
+
+    db.session.add(post_for_add)
+
+
 for comment in comments:
-    add_comment(post_id=comment['postId'],
-                email=comment['email'],
-                name=comment['name'],
-                body=comment['body'])
-    print('comment {} done'.format(count))
-    count += 1
+    comment_for_add = Comment(post_id=comment['postId'],
+                              email=comment['email'],
+                              name=comment['name'],
+                              body=comment['body'])
+
+    db.session.add(comment_for_add)
+
+try:
+    db.session.commit()
+except SQLAlchemyError as e:
+    print('Не удалось записать занные в БД.'
+          'Причина: {}'.format(str(e)))
 
