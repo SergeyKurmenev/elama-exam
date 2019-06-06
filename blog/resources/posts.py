@@ -9,6 +9,8 @@ from blog.db_utils.posts import change_post_tag
 from blog.db_utils.posts import delete_posts
 from blog.db_utils.posts import get_all_posts
 
+from blog.resources.common import make_exception_response
+
 
 class Posts(Resource):
     """Класс для работы с постами."""
@@ -45,9 +47,7 @@ class Posts(Resource):
             posts = get_all_posts()
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-            response.status_code = 503
-
+            response = make_exception_response(str(e))
             return response
 
         result = []
