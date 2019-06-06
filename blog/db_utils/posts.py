@@ -9,6 +9,8 @@ from blog import db
 from blog.models import Category
 from blog.models import Post
 
+from config import Config
+
 
 def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: str = None):
     """Метод добавления поста в БД.
@@ -25,7 +27,12 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     is_draft - опциональный флаг для пометки поста в кач-ве черновика.(default=False)
     tag - опциональная строка для указания категории поста (default=None)
 
-    В случае ошибки при попытке создания поста происходит
+    Перед попыткой создания поста производится проверка корректности полученного
+    user_id и проверка количества символов в title и body
+    (допустимые значения указаны в классе Config - в config.py)
+
+    В случае ошибки при попытке создания поста
+    или провале валидации полей происходит
     raise Exception с сообщением, соответствующим причине ошибки.
 
     """
@@ -37,6 +44,22 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
         logger.warning('Не удалось создать пост. Не корректный user_id: {}'.format(user_id))
         raise Exception('Не удалось создать новый пост с предоставленными данными. '
                         'Проверьте корректность поля user_id.')
+
+    # Валидация поля title
+    if len(title) >= Config.POST_TITLE_MAX_LENGTH:
+        warning_massage = 'Не удалось создать новый пост. ' \
+                          'Причина: превышено количество символов в заголовке. ' \
+                          'Максимально допустимое количество символов: {}'.format(Config.POST_TITLE_MAX_LENGTH)
+        logger.warning(warning_massage)
+        raise Exception(warning_massage)
+
+    # Валидация поля body
+    if len(body) >= Config.POST_BODY_MAX_LENGTH:
+        warning_massage = 'Не удалось создать новый пост. ' \
+                          'Причина: превышено количество символов в тексте сообщения. ' \
+                          'Максимально допустимое количество символов: {}'.format(Config.POST_BODY_MAX_LENGTH)
+        logger.warning(warning_massage)
+        raise Exception(warning_massage)
 
     # Добавление поста, созданного из предоставленных данных, в БД
     try:
