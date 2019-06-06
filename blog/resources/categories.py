@@ -8,6 +8,8 @@ from blog.db_utils.categories import change_category
 from blog.db_utils.categories import add_category
 from blog.db_utils.categories import get_all_categories
 
+from blog.resources.common import make_exception_response
+
 
 class Categories(Resource):
     """Класс для работы с категориями."""
@@ -51,13 +53,7 @@ class Categories(Resource):
                          tag=args['tag'])
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-
-            if str(e) == 'БД временно недоступна':
-                response.status_code = 503
-            else:
-                response.status_code = 409
-
+            response = make_exception_response(str(e))
             return response
 
         return Response(status=201)
