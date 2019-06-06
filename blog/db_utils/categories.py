@@ -70,7 +70,7 @@ def get_all_categories():
         categories = Category.query.all()
     except SQLAlchemyError as e:
         logger.warning('Не удалось получить категории из БД. Причина: {}'.format(e))
-        raise Exception('Ошибка при попытке получить категории из БД')
+        raise Exception('БД временно недоступна')
 
     return categories
 
