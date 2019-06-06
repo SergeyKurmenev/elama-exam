@@ -111,9 +111,7 @@ class Comments(Resource):
             comments = get_all_comments_for_post(post_id=post_id)
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-            response.status_code = 503
-
+            response = make_exception_response(str(e))
             return response
 
         result = []
