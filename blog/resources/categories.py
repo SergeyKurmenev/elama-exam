@@ -129,12 +129,16 @@ class Categories(Resource):
         'tag':   str
         }
 
-        При невозможности получить категории из БД возвращает
-        словать с сообщением об ошибке:
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
 
         {
-        'error':  str
+        'status': str
         }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
 
         """
 
@@ -147,7 +151,10 @@ class Categories(Resource):
                 result.append(category.to_dict())
 
         except Exception as e:
-            return jsonify({'error': str(e)})
+            response = jsonify({'status': str(e)})
+            response.status_code = 503
+
+            return response
 
         return jsonify(result)
 
