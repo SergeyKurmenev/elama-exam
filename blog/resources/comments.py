@@ -28,6 +28,19 @@ class Comments(Resource):
         name - имя оставляющего комментарий
         body - текс комментария
 
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+        При ошибке записи - 409
+        При успешной записи - 201
+
         """
 
         parser = reqparse.RequestParser()
@@ -38,12 +51,23 @@ class Comments(Resource):
 
         args = parser.parse_args()
 
-        add_comment(post_id=int(args['post_id']),
-                    email=args['email'],
-                    name=args['name'],
-                    body=args['body'])
+        try:
+            add_comment(post_id=int(args['post_id']),
+                        email=args['email'],
+                        name=args['name'],
+                        body=args['body'])
 
-        return Response(status=200)
+        except Exception as e:
+            response = jsonify({'status': str(e)})
+
+            if str(e) == 'БД временно недоступна':
+                response.status_code = 503
+            else:
+                response.status_code = 409
+
+            return response
+
+        return Response(status=201)
 
     def get(self):
         """GET запрос для получения всех комментариев поста.
