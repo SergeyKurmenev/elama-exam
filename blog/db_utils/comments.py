@@ -1,6 +1,6 @@
 from loguru import logger
 
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
 from blog import db
@@ -18,20 +18,33 @@ def add_comment(post_id: int, email: str, name: str, body: str):
     name - имя оставившего комментарий
     body - текст комментария
 
+    В случае ошибки при попытке создания комментария происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
 
     """
 
-    comment_for_add = Comment(post_id=post_id,
-                              email=email,
-                              name=name,
-                              body=body)
-
-    db.session.add(comment_for_add)
     try:
+
+        comment_for_add = Comment(post_id=post_id,
+                                  email=email,
+                                  name=name,
+                                  body=body)
+
+        db.session.add(comment_for_add)
         db.session.commit()
-    except OperationalError as e:
+
+    except IntegrityError as e:
         db.session.rollback()
-        raise Exception(str(e))
+        logger.warning('Не удалось создать новый комментарий. '
+                       'Причина: {}'.format(str(e)))
+        raise Exception('Не удалось создать новый комментарий. '
+                        'Проверьте корректность данных.')
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logger.warning('Не удалось создать новый комментарий. '
+                       'Причина: {}'.format(str(e)))
+        raise Exception('БД временно недоступна')
 
 
 def get_all_comments_for_post(post_id: int):
