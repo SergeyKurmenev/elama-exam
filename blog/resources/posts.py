@@ -101,11 +101,18 @@ class Posts(Resource):
 
         args = parser.parse_args()
 
+        is_draft = False
+
+        # Проверка входящего значения is_draft(пометка "черновик")
+        # для корректной обработки строк.
+        if args['is_draft'] and args['is_draft'].lower() == 'true':
+            is_draft = True
+
         try:
             add_post(user_id=args['user_id'],
                      title=args['title'],
                      body=args['body'],
-                     is_draft=bool(args['is_draft']),
+                     is_draft=is_draft,
                      tag=args['tag'])
 
         except Exception as e:
