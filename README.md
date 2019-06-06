@@ -21,6 +21,7 @@ python runserver.py
 source ./bin/full_deploy.sh
 ```
 
+---
 
 ### Скрипт для создания виртуального окружения
 
