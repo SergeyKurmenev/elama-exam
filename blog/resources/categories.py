@@ -101,13 +101,7 @@ class Categories(Resource):
                             tag=args['tag'])
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-
-            if str(e) == 'БД временно недоступна':
-                response.status_code = 503
-            else:
-                response.status_code = 409
-
+            response = make_exception_response(str(e))
             return response
 
         return Response(status=201)
