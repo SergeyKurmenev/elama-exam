@@ -163,6 +163,17 @@ class Posts(Resource):
             'posts_id': '34,45,67,89,2'
             }
 
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+
         """
 
         parser = reqparse.RequestParser()
@@ -170,7 +181,15 @@ class Posts(Resource):
         args = parser.parse_args()
 
         separated_posts_id = args['posts_id'].replace(' ', '').split(',')
-        delete_posts(*separated_posts_id)
+
+        try:
+            delete_posts(*separated_posts_id)
+
+        except Exception as e:
+            response = jsonify({'status': str(e)})
+            response.status_code = 503
+
+            return response
 
         return Response(status=200)
 
