@@ -3,9 +3,12 @@ from loguru import logger
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
+from sqlalchemy.orm.exc import NoResultFound
+
 from blog import db
 
 from blog.models import Comment
+from blog.models import Post
 
 
 def add_comment(post_id: int, email: str, name: str, body: str):
@@ -24,6 +27,16 @@ def add_comment(post_id: int, email: str, name: str, body: str):
     """
 
     try:
+
+        # Проверка существования поста для которого добавляется комментарий
+        try:
+            Post.query.filter(Post.id == post_id).one()
+
+        except NoResultFound:
+            warning_massage = 'Не удалось создать комментарий. ' \
+                              'Причина: пост с id: {} не найден.'.format(post_id)
+            logger.warning(warning_massage)
+            raise Exception(warning_massage)
 
         comment_for_add = Comment(post_id=post_id,
                                   email=email,
