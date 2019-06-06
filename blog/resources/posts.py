@@ -198,9 +198,7 @@ class Posts(Resource):
             delete_posts(*separated_posts_id)
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-            response.status_code = 503
-
+            response = make_exception_response(str(e))
             return response
 
         return Response(status=200)
