@@ -9,6 +9,8 @@ from blog.db_utils.posts import change_post_tag
 from blog.db_utils.posts import delete_posts
 from blog.db_utils.posts import get_all_posts
 
+from blog.resources.common import make_exception_response
+
 
 class Posts(Resource):
     """Класс для работы с постами."""
@@ -45,9 +47,7 @@ class Posts(Resource):
             posts = get_all_posts()
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-            response.status_code = 503
-
+            response = make_exception_response(str(e))
             return response
 
         result = []
@@ -109,13 +109,7 @@ class Posts(Resource):
                      tag=args['tag'])
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-
-            if str(e) == 'БД временно недоступна':
-                response.status_code = 503
-            else:
-                response.status_code = 409
-
+            response = make_exception_response(str(e))
             return response
 
         return Response(status=201)
@@ -159,13 +153,7 @@ class Posts(Resource):
                             tag=args['tag'])
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-
-            if str(e) == 'БД временно недоступна':
-                response.status_code = 503
-            else:
-                response.status_code = 409
-
+            response = make_exception_response(str(e))
             return response
 
         return Response(status=201)
@@ -210,9 +198,7 @@ class Posts(Resource):
             delete_posts(*separated_posts_id)
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-            response.status_code = 503
-
+            response = make_exception_response(str(e))
             return response
 
         return Response(status=200)

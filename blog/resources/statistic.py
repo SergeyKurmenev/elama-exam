@@ -4,6 +4,8 @@ from flask_restful import Resource
 
 from blog.db_utils.posts import get_statistic
 
+from blog.resources.common import make_exception_response
+
 
 class Statistic(Resource):
     """Класс для работы со статистикой."""
@@ -37,9 +39,7 @@ class Statistic(Resource):
         try:
             statistic = get_statistic()
         except Exception as e:
-            response = jsonify({'status': str(e)})
-            response.status_code = 503
-
+            response = make_exception_response(str(e))
             return response
 
         return jsonify(statistic)
