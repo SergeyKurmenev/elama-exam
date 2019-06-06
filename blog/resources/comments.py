@@ -7,6 +7,8 @@ from flask_restful import reqparse
 from blog.db_utils.comments import add_comment
 from blog.db_utils.comments import get_all_comments_for_post
 
+from blog.resources.common import make_exception_response
+
 
 class Comments(Resource):
     """Класс для работы с комментариями."""
@@ -58,13 +60,7 @@ class Comments(Resource):
                         body=args['body'])
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-
-            if str(e) == 'БД временно недоступна':
-                response.status_code = 503
-            else:
-                response.status_code = 409
-
+            response = make_exception_response(str(e))
             return response
 
         return Response(status=201)
