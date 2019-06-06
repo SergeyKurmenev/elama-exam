@@ -141,9 +141,7 @@ class Categories(Resource):
                 result.append(category.to_dict())
 
         except Exception as e:
-            response = jsonify({'status': str(e)})
-            response.status_code = 503
-
+            response = make_exception_response(str(e))
             return response
 
         return jsonify(result)
