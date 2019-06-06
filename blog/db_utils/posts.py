@@ -79,15 +79,26 @@ def delete_posts(*args: int):
     В качестве входных параметров принимает список id:int постов,
     которые необходимо удалить.
 
+    В случае ошибки при обращении к БД происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
+
     """
 
-    for post_id in args:
-        try:
-            post = Post.query.filter(Post.id == post_id).one()
-            db.session.delete(post)
-            db.session.commit()
-        except SQLAlchemyError as e:
-            logger.warning("Пост c id: {} не удалён. Причина: {}".format(post_id, e))
+    try:
+        for post_id in args:
+            try:
+                post = Post.query.filter(Post.id == post_id).one()
+                db.session.delete(post)
+            except NoResultFound as e:
+                logger.warning("Пост c id: {} не удалён. "
+                               "Причина: {}".format(post_id, e))
+
+        db.session.commit()
+
+    except SQLAlchemyError as e:
+        logger.warning('Ошибка при попытке удаления постов: {}. '
+                       'Причина: {}.'.format([*args], str(e)))
+        raise Exception('БД временно недоступна')
 
 
 def get_statistic():
