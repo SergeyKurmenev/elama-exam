@@ -1,4 +1,3 @@
-from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import SQLAlchemyError
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -26,20 +25,35 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     is_draft - опциональный флаг для пометки поста в кач-ве черновика.(default=False)
     tag - опциональная строка для указания категории поста (default=None)
 
+    В случае ошибки при попытке создания поста происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
+
     """
 
-    post_for_add = Post(user_id=user_id,
-                        title=title,
-                        body=body,
-                        is_draft=is_draft,
-                        tag=tag)
-
-    db.session.add(post_for_add)
+    # Проверка корректности предоставленного user_id
     try:
+        user_id = int(user_id)
+    except Exception as e:
+        logger.warning('Не удалось создать пост. Не корректный user_id: {}'.format(user_id))
+        raise Exception('Не удалось создать новый пост с предоставленными данными. '
+                        'Проверьте корректность поля user_id.')
+
+    # Добавление поста, созданного из предоставленных данных, в БД
+    try:
+        post_for_add = Post(user_id=user_id,
+                            title=title,
+                            body=body,
+                            is_draft=is_draft,
+                            tag=tag)
+
+        db.session.add(post_for_add)
         db.session.commit()
-    except OperationalError as e:
+
+    except SQLAlchemyError as e:
         db.session.rollback()
-        raise Exception(str(e))
+        logger.warning('Не удалось создать новый пост. '
+                       'Причина: {}'.format(str(e)))
+        raise Exception('БД временно недоступна')
 
 
 def get_all_posts():
