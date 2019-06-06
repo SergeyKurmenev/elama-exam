@@ -54,7 +54,7 @@ class Comments(Resource):
         args = parser.parse_args()
 
         try:
-            add_comment(post_id=int(args['post_id']),
+            add_comment(post_id=args['post_id'],
                         email=args['email'],
                         name=args['name'],
                         body=args['body'])
