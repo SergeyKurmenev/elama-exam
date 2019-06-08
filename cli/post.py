@@ -53,8 +53,25 @@ def change_tag(post_id, tag):
         print(response.json(), f"Status code: {response.status_code}")
 
 
+@click.command(help='Метод удаления постов')
+@click.option('--posts-id', '-i', help='Id постов, которые необходимо удалить. '
+                                       'При удалении нескольких постов - id перечисляются через ","')
+def delete_posts(posts_id):
+    data = {}
+
+    if posts_id:
+        data['posts_id'] = posts_id
+
+    response = requests.delete('http://127.0.0.1:5000/api/v1/posts', data=data)
+    if response.status_code == 200:
+        print(f"Status code: {response.status_code}")
+    else:
+        print(response.json(), f"Status code: {response.status_code}")
+
+
 post.add_command(make_post)
 post.add_command(change_tag)
+post.add_command(delete_posts)
 
 
 if __name__ == '__main__':
