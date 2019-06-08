@@ -156,7 +156,7 @@ class Posts(Resource):
         args = parser.parse_args()
 
         try:
-            change_post_tag(post_id=int(args['post_id']),
+            change_post_tag(post_id=args['post_id'],
                             tag=args['tag'])
 
         except Exception as e:
