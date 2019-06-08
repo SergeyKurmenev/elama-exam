@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -37,6 +38,15 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
 
     """
 
+# =============================
+
+    '''Вид данной части кода обусловлен особенностью используемой БД(SQLite).
+    В данной БД нет возможности ограничить длину записываемой строки и, как следствие, 
+    невозможно получить IntegrityError при записи более длинной строки, чем указана 
+    в описании БД(в файле models.py).
+    Попытки сохранить строку в поле, которое было определено как Integer 
+    так же не вызывают ошибок.'''
+
     # Проверка корректности предоставленного user_id
     try:
         user_id = int(user_id)
@@ -46,7 +56,7 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
                         'Проверьте корректность поля user_id.')
 
     # Валидация поля title
-    if len(title) >= Config.POST_TITLE_MAX_LENGTH:
+    if title and len(title) >= Config.POST_TITLE_MAX_LENGTH:
         warning_massage = 'Не удалось создать новый пост. ' \
                           'Причина: превышено количество символов в заголовке. ' \
                           'Максимально допустимое количество символов: {}'.format(Config.POST_TITLE_MAX_LENGTH)
@@ -54,12 +64,14 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
         raise Exception(warning_massage)
 
     # Валидация поля body
-    if len(body) >= Config.POST_BODY_MAX_LENGTH:
+    if body and len(body) >= Config.POST_BODY_MAX_LENGTH:
         warning_massage = 'Не удалось создать новый пост. ' \
                           'Причина: превышено количество символов в тексте сообщения. ' \
                           'Максимально допустимое количество символов: {}'.format(Config.POST_BODY_MAX_LENGTH)
         logger.warning(warning_massage)
         raise Exception(warning_massage)
+
+# =============================
 
     # Добавление поста, созданного из предоставленных данных, в БД
     try:
@@ -71,6 +83,13 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
 
         db.session.add(post_for_add)
         db.session.commit()
+
+    except IntegrityError as e:
+        db.session.rollback()
+        logger.warning("Не удалось создать пост с предоставленными данными. "
+                       f"Причина: {str(e)}")
+        raise Exception("Не корректные данные. "
+                        "Проверьте наличие всех обязательных полей в запросе.")
 
     except SQLAlchemyError as e:
         db.session.rollback()
