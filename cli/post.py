@@ -35,6 +35,28 @@ def make_post(user_id, title, body, is_draft, tag):
         print(response.json(), f"Status code: {response.status_code}")
 
 
+@click.command(help='Метод добавления/изменения тэга поста')
+@click.option('--post-id', '-i', help='Id поста для которого будет производиться замена тэга')
+@click.option('--tag', '-t', help='Новый тэг, который необходимо присвоить посту')
+def change_tag(post_id, tag):
+    data = {}
+
+    if post_id:
+        data['post_id'] = post_id
+    if tag:
+        data['tag'] = tag
+
+    response = requests.put('http://127.0.0.1:5000/api/v1/posts', data=data)
+    if response.status_code == 201:
+        print(response.status_code)
+    else:
+        print(response.json(), f"Status code: {response.status_code}")
+
+
+post.add_command(make_post)
+post.add_command(change_tag)
+
+
 if __name__ == '__main__':
-    make_post()
+    post()
 
