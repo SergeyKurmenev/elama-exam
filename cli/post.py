@@ -2,7 +2,12 @@ import click
 import requests
 
 
-@click.command()
+@click.group(help='Методы работы с постами')
+def post():
+    pass
+
+
+@click.command(help='Метод создания нового поста')
 @click.option('--user-id', '-i', help='Id пользователя, который добавляет пост')
 @click.option('--title', '-t', help='Заголовок поста')
 @click.option('--body', '-b', help='Текст поста')
