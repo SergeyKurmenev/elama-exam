@@ -26,8 +26,10 @@ def get_categories():
 
 @click.command(help='Метод редактирования категорий')
 @click.option('--category-id', '-i', help='Id категории, которую необходимо отредактировать')
-@click.option('--name', '-n', help='Новое название категории')
-@click.option('--tag', '-t', help='Новый тэг категории')
+@click.option('--name', '-n', help='Новое название категории '
+                                   '(опционально, при отсутствии сохраняется старое название)')
+@click.option('--tag', '-t', help='Новый тэг категории '
+                                  '(опционально, при отсутствии сохраняется старый тэг)')
 def change_category(category_id, name, tag):
     data = {}
 
