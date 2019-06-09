@@ -24,6 +24,31 @@ def get_categories():
     print(response.json(), f"Status code: {response.status_code}")
 
 
+@click.command(help='Метод редактирования категорий')
+@click.option('--category-id', '-i', help='Id категории, которую необходимо отредактировать')
+@click.option('--name', '-n', help='Новое название категории '
+                                   '(опционально, при отсутствии сохраняется старое название)')
+@click.option('--tag', '-t', help='Новый тэг категории '
+                                  '(опционально, при отсутствии сохраняется старый тэг)')
+def change_category(category_id, name, tag):
+    data = {}
+
+    if category_id:
+        data['category_id'] = category_id
+    if name:
+        data['name'] = name
+    if tag:
+        data['tag'] = tag
+
+    response = requests.put('http://127.0.0.1:5000/api/v1/categories', data=data)
+
+    if response.status_code == 201:
+        print(f"Status code; {response.status_code}")
+    else:
+        print(response.json(), f"Status code: {response.status_code}")
+
+
+category.add_command(change_category)
 category.add_command(make_category)
 category.add_command(get_categories)
 
