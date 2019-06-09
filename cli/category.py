@@ -57,7 +57,7 @@ def change_category(category_id, name, tag):
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
-        print(response.json())
+        click.echo(response.json())
 
 
 category.add_command(change_category)
