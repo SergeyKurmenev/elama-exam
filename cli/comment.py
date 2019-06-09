@@ -40,10 +40,7 @@ def get_comments(post_id):
         data['post_id'] = post_id
 
     response = requests.get('http://127.0.0.1:5000/api/v1/comments', data=data)
-    if response.status_code == 200:
-        print(response.status_code)
-    else:
-        print(response.json(), f"Status code: {response.status_code}")
+    print(response.json(), f"Status code: {response.status_code}")
 
 
 comment.add_command(make_comment)
