@@ -16,7 +16,7 @@ def make_category(name, tag):
 
     response = requests.post('http://127.0.0.1:5000/api/v1/categories', data=data)
 
-    if response.status_code == 201:
+    if response.ok:
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
@@ -27,7 +27,7 @@ def make_category(name, tag):
 def get_categories():
     response = requests.get('http://127.0.0.1:5000/api/v1/categories')
 
-    if response.status_code == 200:
+    if response.ok:
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
@@ -53,7 +53,7 @@ def change_category(category_id, name, tag):
 
     response = requests.put('http://127.0.0.1:5000/api/v1/categories', data=data)
 
-    if response.status_code == 201:
+    if response.ok:
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
