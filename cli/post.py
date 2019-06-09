@@ -29,10 +29,12 @@ def make_post(user_id, title, body, is_draft, tag):
         data["tag"] = tag
 
     response = requests.post('http://127.0.0.1:5000/api/v1/posts', data=data)
+
     if response.status_code == 201:
-        print(response.status_code)
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
-        print(response.json(), f"Status code: {response.status_code}")
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+        click.echo(response.json())
 
 
 @click.command(help='Метод добавления/изменения тэга поста')
@@ -47,10 +49,12 @@ def change_tag(post_id, tag):
         data['tag'] = tag
 
     response = requests.put('http://127.0.0.1:5000/api/v1/posts', data=data)
+
     if response.status_code == 201:
-        print(response.status_code)
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
-        print(response.json(), f"Status code: {response.status_code}")
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+        click.echo(response.json())
 
 
 @click.command(help='Метод удаления постов')
@@ -63,10 +67,12 @@ def delete_posts(posts_id):
         data['posts_id'] = posts_id
 
     response = requests.delete('http://127.0.0.1:5000/api/v1/posts', data=data)
+
     if response.status_code == 200:
-        print(f"Status code: {response.status_code}")
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
-        print(response.json(), f"Status code: {response.status_code}")
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+        click.echo(response.json())
 
 
 post.add_command(make_post)
