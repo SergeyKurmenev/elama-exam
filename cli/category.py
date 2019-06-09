@@ -15,13 +15,24 @@ def make_category(name, tag):
             "tag": tag}
 
     response = requests.post('http://127.0.0.1:5000/api/v1/categories', data=data)
-    print(response.status_code)
+
+    if response.status_code == 201:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
+    else:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+        click.echo(response.json())
 
 
 @click.command(help='Метод получения всех категорий')
 def get_categories():
     response = requests.get('http://127.0.0.1:5000/api/v1/categories')
-    print(response.json(), f"Status code: {response.status_code}")
+
+    if response.status_code == 200:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
+    else:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+
+    click.echo(response.json())
 
 
 @click.command(help='Метод редактирования категорий')
@@ -43,9 +54,10 @@ def change_category(category_id, name, tag):
     response = requests.put('http://127.0.0.1:5000/api/v1/categories', data=data)
 
     if response.status_code == 201:
-        print(f"Status code; {response.status_code}")
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
-        print(response.json(), f"Status code: {response.status_code}")
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+        click.echo(response.json())
 
 
 category.add_command(change_category)
