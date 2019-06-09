@@ -10,7 +10,13 @@ def statistic():
 @click.command(help='Метод получения статистики')
 def get_statistic():
     response = requests.get('http://127.0.0.1:5000/api/v1/statistic')
-    print(response.json(), f"Status code: {response.status_code}")
+
+    if response.status_code == 200:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
+    else:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+
+    click.echo(response.json())
 
 
 statistic.add_command(get_statistic)
