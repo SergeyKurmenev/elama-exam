@@ -26,7 +26,7 @@ def make_comment(post_id, email, name, body):
 
     response = requests.post('http://127.0.0.1:5000/api/v1/comments', data=data)
 
-    if response.status_code == 201:
+    if response.ok:
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
@@ -43,7 +43,7 @@ def get_comments(post_id):
 
     response = requests.get('http://127.0.0.1:5000/api/v1/comments', data=data)
 
-    if response.status_code == 200:
+    if response.ok:
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
