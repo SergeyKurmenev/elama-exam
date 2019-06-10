@@ -78,7 +78,31 @@ class Categories(Resource):
 
         return Response(status=201)
 
-    @swagger.operation()
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "category_id",
+                "description": "Id редактируемой категории",
+                "in": "query",
+                "dataType": "integer",
+                "paramType": "form"
+            },
+            {
+                "name": "name",
+                "description": "Новое название категории(опционально)",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            },
+            {
+                "name": "tag",
+                "description": "Новый тэг категории(опционально)",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            }
+        ]
+    )
     def put(self):
         """PUT запрос для изменения категории.
 
