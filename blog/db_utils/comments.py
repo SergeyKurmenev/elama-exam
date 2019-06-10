@@ -77,7 +77,16 @@ def get_all_comments_for_post(post_id: int):
     """
 
     try:
+        Post.query.filter(Post.id == post_id).one()
+
         comments = Comment.query.filter(Comment.post_id == post_id).all()
+
+    except NoResultFound as e:
+        logger.warning(f'Не удалось получить комментарии адресованные посту с id: {post_id}. '
+                       f'Причина: {str(e)}.')
+        raise Exception('Не удалось получить комментарии адресованные посту. '
+                        f'Причина: пост с id {post_id} не найден.')
+
     except SQLAlchemyError as e:
         logger.warning('Не удалось получить комментарии адресованные посту с id: {}. '
                        'Причина: {}.'.format(post_id, str(e)))
