@@ -75,6 +75,10 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
 
     # Добавление поста, созданного из предоставленных данных, в БД
     try:
+
+        if tag:
+            Category.query.filter(Category.tag == tag).one()
+
         post_for_add = Post(user_id=user_id,
                             title=title,
                             body=body,
@@ -83,6 +87,12 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
 
         db.session.add(post_for_add)
         db.session.commit()
+
+    except NoResultFound as e:
+        logger.warning("Не удалось создать пост с предоставленными данными. "
+                       f"Причина: {str(e)}")
+        raise Exception("Не корректные данные. "
+                        "Категория с данным тэгом не найдена.")
 
     except IntegrityError as e:
         db.session.rollback()
