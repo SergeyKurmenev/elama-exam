@@ -51,7 +51,7 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     try:
         user_id = int(user_id)
     except Exception as e:
-        logger.warning('Не удалось создать пост. Не корректный user_id: {}'.format(user_id))
+        logger.warning(f'Не удалось создать пост. Не корректный user_id: {user_id}')
         raise Exception('Не удалось создать новый пост с предоставленными данными. '
                         'Проверьте корректность поля user_id.')
 
@@ -59,7 +59,7 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     if title and len(title) >= Config.POST_TITLE_MAX_LENGTH:
         warning_massage = 'Не удалось создать новый пост. ' \
                           'Причина: превышено количество символов в заголовке. ' \
-                          'Максимально допустимое количество символов: {}'.format(Config.POST_TITLE_MAX_LENGTH)
+                          f'Максимально допустимое количество символов: {Config.POST_TITLE_MAX_LENGTH}'
         logger.warning(warning_massage)
         raise Exception(warning_massage)
 
@@ -67,7 +67,7 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     if body and len(body) >= Config.POST_BODY_MAX_LENGTH:
         warning_massage = 'Не удалось создать новый пост. ' \
                           'Причина: превышено количество символов в тексте сообщения. ' \
-                          'Максимально допустимое количество символов: {}'.format(Config.POST_BODY_MAX_LENGTH)
+                          f'Максимально допустимое количество символов: {Config.POST_BODY_MAX_LENGTH}'
         logger.warning(warning_massage)
         raise Exception(warning_massage)
 
@@ -105,7 +105,7 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.warning('Не удалось создать новый пост. '
-                       'Причина: {}'.format(str(e)))
+                       f'Причина: {str(e)}')
         raise Exception('БД временно недоступна')
 
 
@@ -134,7 +134,7 @@ def get_all_posts():
         posts = Post.query.filter(Post.is_draft == False).all()
     except SQLAlchemyError as e:
         logger.warning('Ошибка при попытке получить все посты из БД. '
-                       'Причина: {}.'.format(str(e)))
+                       f'Причина: {str(e)}.')
         raise Exception('БД временно недоступна')
 
     return posts
@@ -157,14 +157,14 @@ def delete_posts(*args: int):
                 post = Post.query.filter(Post.id == post_id).one()
                 db.session.delete(post)
             except NoResultFound as e:
-                logger.warning("Пост c id: {} не удалён. "
-                               "Причина: {}".format(post_id, e))
+                logger.warning(f'Пост c id: {post_id} не удалён. '
+                               f'Причина: {str(e)}')
 
         db.session.commit()
 
     except SQLAlchemyError as e:
-        logger.warning('Ошибка при попытке удаления постов: {}. '
-                       'Причина: {}.'.format([*args], str(e)))
+        logger.warning(f'Ошибка при попытке удаления постов: {[*args]}. '
+                       f'Причина: {str(e)}.')
         raise Exception('БД временно недоступна')
 
 
@@ -197,7 +197,7 @@ def get_statistic():
         statistic['draft_count'] = draft_count
 
     except SQLAlchemyError as e:
-        logger.warning("Не удалось получить статистику. Причина: {}".format(e))
+        logger.warning(f'Не удалось получить статистику. Причина: {str(e)}')
         raise Exception('БД временно недоступна')
 
     return statistic
@@ -232,14 +232,14 @@ def change_post_tag(post_id: int, tag: str):
         db.session.commit()
 
     except NoResultFound as e:
-        logger.warning('Тэг для поста с id: {}  на новый тэг "{}" не изменён. '
-                       'Причина: {} '.format(post_id, tag, str(e)))
+        logger.warning(f'Тэг для поста с id: {post_id}  на новый тэг "{tag}" не изменён. '
+                       f'Причина: {str(e)} ')
         raise Exception('Не удалось заменить тэг поста. '
                         'Проверьте правильность предоставленного id поста '
                         'и существование предоставленного тэга')
 
     except SQLAlchemyError as e:
-        logger.warning('Тэг для поста с id: {} не изменён. Причина: {}'.format(post_id, e))
+        logger.warning(f'Тэг для поста с id: {post_id} не изменён. Причина: {str(e)}')
         raise Exception('БД временно недоступна')
 
 
@@ -260,8 +260,8 @@ def get_posts_with_tag(tag: str):
     try:
         posts = Post.query.filter(Post.tag == tag).all()
     except SQLAlchemyError as e:
-        logger.warning('Не удалось получить посты, отмеченные тэгом: {}. '
-                       'Причина: {}.'.format(tag, str(e)))
+        logger.warning(f'Не удалось получить посты, отмеченные тэгом: {tag}. '
+                       f'Причина: {str(e)}.')
         raise Exception('БД временно недоступна')
 
     return posts
@@ -295,10 +295,10 @@ def refresh_tag(old_tag: str, new_tag: str):
         db.session.commit()
 
     except SQLAlchemyError as e:
-        logger.warning('Не удалось обновить тэги постам, отмеченным тэгом: {}. '
-                       'Причина: {}.'.format(old_tag, str(e)))
+        logger.warning(f'Не удалось обновить тэги постам, отмеченным тэгом: {old_tag}. '
+                       f'Причина: {str(e)}.')
 
     except Exception as e:
-        logger.warning('Не удалось обновить тэги постам, отмеченным тэгом: {}. '
-                       'Причина: {}.'.format(old_tag, str(e)))
+        logger.warning(f'Не удалось обновить тэги постам, отмеченным тэгом: {old_tag}. '
+                       f'Причина: {str(e)}.')
 
