@@ -4,6 +4,8 @@ from flask import Response
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from flask_restful_swagger import swagger
+
 from blog.db_utils.comments import add_comment
 from blog.db_utils.comments import get_all_comments_for_post
 
@@ -13,6 +15,7 @@ from blog.resources.common import make_exception_response
 class Comments(Resource):
     """Класс для работы с комментариями."""
 
+    @swagger.operation()
     def post(self):
         """POST запрос для добавления комментария к посту.
 
@@ -65,6 +68,7 @@ class Comments(Resource):
 
         return Response(status=201)
 
+    @swagger.operation()
     def get(self):
         """GET запрос для получения всех комментариев поста.
 
