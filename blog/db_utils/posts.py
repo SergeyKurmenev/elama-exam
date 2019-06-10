@@ -76,8 +76,9 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     # Добавление поста, созданного из предоставленных данных, в БД
     try:
 
-        if tag:
-            Category.query.filter(Category.tag == tag).one()
+        # Проверка существования категории с данным тэгом
+        if not Category.query.filter(Category.tag == tag).count():
+            raise NoResultFound(f'Категория с тэгом {tag} не найдена')
 
         post_for_add = Post(user_id=user_id,
                             title=title,
@@ -222,25 +223,20 @@ def change_post_tag(post_id: int, tag: str):
     try:
 
         # Проверка на существование категории с данным тэгом
-        try:
-            if tag:
-                Category.query.filter(Category.tag == tag).one()
-        except NoResultFound as e:
-            logger.warning('Тэг для поста с id: {} не изменён. Причина: тэг {} не найден в БД. '
-                           'Error massage: "{}"'.format(post_id, tag, str(e)))
-            raise Exception('Данный тэг не найден в БД. '
-                            'Проверьте правильность написания тэга или создайте новую категорию')
+        if not Category.query.filter(Category.tag == tag).count():
+            raise NoResultFound(f'Категория с тэгом {tag} не найдена')
 
-        # Проверка на существование поста с данным id и замена его тэга на новый
-        try:
-            post_for_change_tag = Post.query.filter(Post.id == post_id).one()
-            post_for_change_tag.tag = tag
-        except NoResultFound as e:
-            logger.warning('Тэг для поста с id: {} не изменён. Причина: пост не найден. '
-                           'Error massage: "{}"'.format(post_id, str(e)))
-            raise Exception('Пост с данным id не найден в БД')
+        post_for_change_tag = Post.query.filter(Post.id == post_id).one()
+        post_for_change_tag.tag = tag
 
         db.session.commit()
+
+    except NoResultFound as e:
+        logger.warning('Тэг для поста с id: {}  на новый тэг "{}" не изменён. '
+                       'Причина: {} '.format(post_id, tag, str(e)))
+        raise Exception('Не удалось заменить тэг поста. '
+                        'Проверьте правильность предоставленного id поста '
+                        'и существование предоставленного тэга')
 
     except SQLAlchemyError as e:
         logger.warning('Тэг для поста с id: {} не изменён. Причина: {}'.format(post_id, e))
