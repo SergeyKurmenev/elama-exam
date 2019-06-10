@@ -2,6 +2,8 @@ from flask import jsonify
 
 from flask_restful import Resource
 
+from flask_restful_swagger import swagger
+
 from blog.db_utils.posts import get_statistic
 
 from blog.resources.common import make_exception_response
@@ -10,6 +12,7 @@ from blog.resources.common import make_exception_response
 class Statistic(Resource):
     """Класс для работы со статистикой."""
 
+    @swagger.operation()
     def get(self):
         """GET запрос для получения статистики постов.
 
