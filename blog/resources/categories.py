@@ -16,7 +16,24 @@ from blog.resources.common import make_exception_response
 class Categories(Resource):
     """Класс для работы с категориями."""
 
-    @swagger.operation()
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "name",
+                "description": "Название категории",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            },
+            {
+                "name": "tag",
+                "description": "Тэг категории",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            }
+        ]
+    )
     def post(self):
         """POST запрос для создания категории.
 
