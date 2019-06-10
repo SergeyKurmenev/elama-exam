@@ -37,12 +37,12 @@ def add_category(name: str, tag: str):
 
     except IntegrityError as e:
         db.session.rollback()
-        logger.warning('Не удалось добавить новую категорию в БД. Причина: {}'.format(e))
+        logger.warning(f'Не удалось добавить новую категорию в БД. Причина: {str(e)}')
         raise Exception('Не корректные данные, возможно такая категория или тэг уже заняты')
 
     except SQLAlchemyError as e:
         db.session.rollback()
-        logger.warning('Не удалось добавить новую категорию в БД. Причина: {}'.format(e))
+        logger.warning(f'Не удалось добавить новую категорию в БД. Причина: {str(e)}')
         raise Exception('БД временно недоступна')
 
 
@@ -69,7 +69,7 @@ def get_all_categories():
     try:
         categories = Category.query.all()
     except SQLAlchemyError as e:
-        logger.warning('Не удалось получить категории из БД. Причина: {}'.format(e))
+        logger.warning(f'Не удалось получить категории из БД. Причина: {str(e)}')
         raise Exception('БД временно недоступна')
 
     return categories
@@ -107,19 +107,19 @@ def change_category(category_id: int, name: str = None, tag: str = None):
         db.session.commit()
 
     except NoResultFound as e:
-        logger.warning('Редактирование категории с id: {} не удалось. '
-                       'Причина: категория не найдена. Error massage: "{}"'.format(category_id, str(e)))
+        logger.warning(f'Редактирование категории с id: {category_id} не удалось. '
+                       f'Причина: категория не найдена. Error massage: "{str(e)}"')
         raise Exception('Категория с данным id не найдена в БД')
 
     except IntegrityError as e:
-        logger.warning('Редактирование категории с id: {} не удалось. '
-                       'Причина: не корректные данные. Error massage: "{}"'.format(category_id, str(e)))
+        logger.warning(f'Редактирование категории с id: {category_id} не удалось. '
+                       f'Причина: не корректные данные. Error massage: "{str(e)}"')
         raise Exception('Ошибка при попытке редактирования. '
                         'Возможно данное имя или тэг уже заняты.')
 
     except SQLAlchemyError as e:
-        logger.warning('Редактирование категории с id: {} не удалось. '
-                       'Причина: "{}"'.format(category_id, str(e)))
+        logger.warning(f'Редактирование категории с id: {category_id} не удалось. '
+                       f'Причина: "{str(e)}"')
         raise Exception('БД временно недоступна')
 
     if old_tag:
