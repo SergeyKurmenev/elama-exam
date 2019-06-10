@@ -46,21 +46,21 @@ def add_comment(post_id: int, email: str, name: str, body: str):
 
     except NoResultFound:
         warning_massage = 'Не удалось создать комментарий. ' \
-                          'Причина: пост с id: {} не найден.'.format(post_id)
+                          f'Причина: пост с id: {post_id} не найден.'
         logger.warning(warning_massage)
         raise Exception(warning_massage)
 
     except IntegrityError as e:
         db.session.rollback()
         logger.warning('Не удалось создать новый комментарий. '
-                       'Причина: {}'.format(str(e)))
+                       f'Причина: {str(e)}')
         raise Exception('Не удалось создать новый комментарий. '
                         'Проверьте корректность данных.')
 
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.warning('Не удалось создать новый комментарий. '
-                       'Причина: {}'.format(str(e)))
+                       f'Причина: {str(e)}')
         raise Exception('БД временно недоступна')
 
 
@@ -90,8 +90,8 @@ def get_all_comments_for_post(post_id: int):
                         f'Причина: пост с id {post_id} не найден.')
 
     except SQLAlchemyError as e:
-        logger.warning('Не удалось получить комментарии адресованные посту с id: {}. '
-                       'Причина: {}.'.format(post_id, str(e)))
+        logger.warning(f'Не удалось получить комментарии адресованные посту с id: {post_id}. '
+                       f'Причина: {str(e)}.')
         raise Exception('БД временно недоступна')
 
     return comments
