@@ -186,7 +186,8 @@ def get_statistic():
 
     """
 
-    statistic = {'post_count': None,
+    statistic = {'total': None,
+                 'post_count': None,
                  'draft_count': None}
 
     try:
@@ -195,6 +196,8 @@ def get_statistic():
 
         draft_count = Post.query.filter(Post.is_draft == True).count()
         statistic['draft_count'] = draft_count
+
+        statistic['total'] = post_count + draft_count
 
     except SQLAlchemyError as e:
         logger.warning(f'Не удалось получить статистику. Причина: {str(e)}')
