@@ -33,14 +33,8 @@ def add_comment(post_id: int, email: str, name: str, body: str):
     try:
 
         # Проверка существования поста для которого добавляется комментарий
-        try:
-            Post.query.filter(Post.id == post_id).one()
-
-        except NoResultFound:
-            warning_massage = 'Не удалось создать комментарий. ' \
-                              'Причина: пост с id: {} не найден.'.format(post_id)
-            logger.warning(warning_massage)
-            raise Exception(warning_massage)
+        if not Post.query.filter(Post.id == post_id).count():
+            raise NoResultFound('Пост не найден.')
 
         comment_for_add = Comment(post_id=post_id,
                                   email=email,
@@ -49,6 +43,12 @@ def add_comment(post_id: int, email: str, name: str, body: str):
 
         db.session.add(comment_for_add)
         db.session.commit()
+
+    except NoResultFound:
+        warning_massage = 'Не удалось создать комментарий. ' \
+                          'Причина: пост с id: {} не найден.'.format(post_id)
+        logger.warning(warning_massage)
+        raise Exception(warning_massage)
 
     except IntegrityError as e:
         db.session.rollback()
@@ -77,7 +77,9 @@ def get_all_comments_for_post(post_id: int):
     """
 
     try:
-        Post.query.filter(Post.id == post_id).one()
+        # Проверка существования поста для которого необходимо получить комментарии
+        if not Post.query.filter(Post.id == post_id).count():
+            raise NoResultFound('Пост не найден')
 
         comments = Comment.query.filter(Comment.post_id == post_id).all()
 
