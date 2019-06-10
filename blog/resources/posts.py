@@ -4,6 +4,8 @@ from flask import Response
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from flask_restful_swagger import swagger
+
 from blog.db_utils.posts import add_post
 from blog.db_utils.posts import change_post_tag
 from blog.db_utils.posts import delete_posts
@@ -15,6 +17,7 @@ from blog.resources.common import make_exception_response
 class Posts(Resource):
     """Класс для работы с постами."""
 
+    @swagger.operation()
     def get(self):
         """GET запрос для получения всех постов.
 
@@ -55,6 +58,7 @@ class Posts(Resource):
             result.append(post.to_dict())
         return jsonify(result)
 
+    @swagger.operation()
     def post(self):
         """POST запрос для добавления поста/черновика.
 
@@ -121,6 +125,7 @@ class Posts(Resource):
 
         return Response(status=201)
 
+    @swagger.operation()
     def put(self):
         """PUT метод для добавления/редактирования тэга поста.
 
@@ -165,6 +170,7 @@ class Posts(Resource):
 
         return Response(status=201)
 
+    @swagger.operation()
     def delete(self):
         """DELETE метод для удаления постов.
 
