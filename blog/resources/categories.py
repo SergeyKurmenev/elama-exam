@@ -4,6 +4,8 @@ from flask import Response
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from flask_restful_swagger import swagger
+
 from blog.db_utils.categories import change_category
 from blog.db_utils.categories import add_category
 from blog.db_utils.categories import get_all_categories
@@ -14,6 +16,7 @@ from blog.resources.common import make_exception_response
 class Categories(Resource):
     """Класс для работы с категориями."""
 
+    @swagger.operation()
     def post(self):
         """POST запрос для создания категории.
 
@@ -58,6 +61,7 @@ class Categories(Resource):
 
         return Response(status=201)
 
+    @swagger.operation()
     def put(self):
         """PUT запрос для изменения категории.
 
@@ -106,6 +110,7 @@ class Categories(Resource):
 
         return Response(status=201)
 
+    @swagger.operation()
     def get(self):
         """GET запрос для получения всех существующих категорий.
 
