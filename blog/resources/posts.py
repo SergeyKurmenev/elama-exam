@@ -199,9 +199,12 @@ class Posts(Resource):
         parser.add_argument('posts_id')
         args = parser.parse_args()
 
-        separated_posts_id = args['posts_id'].replace(' ', '').split(',')
-
         try:
+            try:
+                separated_posts_id = args['posts_id'].replace(' ', '').split(',')
+            except Exception:
+                raise Exception('Проверьте корректность параметра posts_id')
+
             delete_posts(*separated_posts_id)
 
         except Exception as e:
