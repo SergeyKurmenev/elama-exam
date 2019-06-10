@@ -35,5 +35,5 @@ try:
     db.session.commit()
 except SQLAlchemyError as e:
     print('Не удалось записать занные в БД.'
-          'Причина: {}'.format(str(e)))
+          f'Причина: {str(e)}')
 
