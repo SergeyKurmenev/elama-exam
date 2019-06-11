@@ -173,7 +173,14 @@ class Categories(Resource):
 
         return Response(status=201)
 
-    @swagger.operation()
+    @swagger.operation(
+        responseMessages=[
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
+        ]
+    )
     def get(self):
         """GET запрос для получения всех существующих категорий.
 
