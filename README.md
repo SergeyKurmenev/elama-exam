@@ -8,9 +8,9 @@
 
 Она доступна после запуска приложения по ссылкам:
 
-- [В виде JSON](http://localhost:5000/api/spec.html#!/spec)
+- [В виде HTML](http://localhost:5000/api/spec.html#!/spec)
 
-- [В виде HTML](http://localhost:5000/api/spec.json)
+- [В виде JSON](http://localhost:5000/api/spec.json)
 
 
 ---
