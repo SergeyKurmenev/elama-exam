@@ -45,6 +45,18 @@ class Comments(Resource):
                 "dataType": "string",
                 "paramType": "form"
             }
+        ],
+        responseMessages=[
+            {
+                "code": 409,
+                "message": "Конфликт при попытке создания"
+                           "(текст зависит от конкретной причины - "
+                           "не найден пост/присланы не корректные данные)"
+            },
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
         ]
     )
     def post(self):
