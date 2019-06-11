@@ -37,6 +37,14 @@ for comment in comments:
 
     db.session.add(comment_for_add)
 
+for draft in posts:
+    draft_for_add = Post(user_id=post['userId'],
+                         title=post['title'],
+                         body=post['body'],
+                         is_draft=True)
+
+    db.session.add(draft_for_add)
+
 try:
     db.session.commit()
 except SQLAlchemyError as e:
