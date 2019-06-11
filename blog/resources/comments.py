@@ -120,6 +120,17 @@ class Comments(Resource):
                 "dataType": "integer",
                 "paramType": "query"
             }
+        ],
+        responseMessages=[
+            {
+                "code": 409,
+                "message": "Не удалось получить комментарии адресованные посту."
+                           "Причина: пост с id {post_id} не найден."
+            },
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
         ]
     )
     def get(self):
@@ -155,6 +166,7 @@ class Comments(Resource):
         Status code:
 
         При невозможности подключения к БД - 503
+        При отсутствии поста, для которого необходимо получить комментарии - 409
 
         """
 
