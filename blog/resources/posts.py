@@ -191,6 +191,18 @@ class Posts(Resource):
                 "dataType": "string",
                 "paramType": "form"
             }
+        ],
+        responseMessages=[
+            {
+                "code": 409,
+                "message": "Не удалось заменить тэг поста. "
+                           "Проверьте правильность предоставленного id поста "
+                           "и существование предоставленного тэга"
+            },
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
         ]
     )
     def put(self):
