@@ -15,7 +15,38 @@ from blog.resources.common import make_exception_response
 class Comments(Resource):
     """Класс для работы с комментариями."""
 
-    @swagger.operation()
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "post_id",
+                "description": "Id поста для которого создаётся комментарий",
+                "in": "query",
+                "dataType": "integer",
+                "paramType": "form"
+            },
+            {
+                "name": "email",
+                "description": "Email оставляющего комментарий",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            },
+            {
+                "name": "name",
+                "description": "Имя оставляющего комментарий",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            },
+            {
+                "name": "text",
+                "description": "Текст комментария",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            }
+        ]
+    )
     def post(self):
         """POST запрос для добавления комментария к посту.
 
@@ -25,7 +56,7 @@ class Comments(Resource):
         'post_id':  int,
         'email':    str,
         'name':     str,
-        'body':     str
+        'text':     str
         }
 
         post_id - id поста для которого создаётся комментарий
@@ -52,7 +83,7 @@ class Comments(Resource):
         parser.add_argument('post_id')
         parser.add_argument('email')
         parser.add_argument('name')
-        parser.add_argument('body')
+        parser.add_argument('text')
 
         args = parser.parse_args()
 
@@ -60,7 +91,7 @@ class Comments(Resource):
             add_comment(post_id=args['post_id'],
                         email=args['email'],
                         name=args['name'],
-                        body=args['body'])
+                        body=args['text'])
 
         except Exception as e:
             response = make_exception_response(str(e))
