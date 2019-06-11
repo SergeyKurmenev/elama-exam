@@ -1,5 +1,7 @@
 import json
 
+import random
+
 from urllib.request import urlopen
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -23,9 +25,14 @@ posts = json.loads(urlopen(posts_url).read())
 comments = json.loads(urlopen(comments_url).read())
 
 for post in posts:
+    category_number = random.randint(0, categories_count)
+    tag = None
+    if category_number:
+        tag = f'#tag{random.randint(1, categories_count)}'
     post_for_add = Post(user_id=post['userId'],
                         title=post['title'],
-                        body=post['body'])
+                        body=post['body'],
+                        tag=tag)
 
     db.session.add(post_for_add)
 
