@@ -68,7 +68,17 @@ class Comments(Resource):
 
         return Response(status=201)
 
-    @swagger.operation()
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "post_id",
+                "description": "Id поста для которого необходимо получить комментарии",
+                "in": "query",
+                "dataType": "integer",
+                "paramType": "query"
+            }
+        ]
+    )
     def get(self):
         """GET запрос для получения всех комментариев поста.
 
