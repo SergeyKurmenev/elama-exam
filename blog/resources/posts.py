@@ -265,6 +265,12 @@ class Posts(Resource):
                 "dataType": "integer",
                 "paramType": "form"
             }
+        ],
+        responseMessages=[
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
         ]
     )
     def delete(self):
