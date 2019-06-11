@@ -111,6 +111,18 @@ class Categories(Resource):
                 "dataType": "string",
                 "paramType": "form"
             }
+        ],
+        responseMessages=[
+            {
+                "code": 409,
+                "message": "Конфликт при попытке редактирования"
+                           "(текст зависит от конкретной причины - "
+                           "не найдена категория/новое имя или тэг уже заняты)"
+            },
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
         ]
     )
     def put(self):
