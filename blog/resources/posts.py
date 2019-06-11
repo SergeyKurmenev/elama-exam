@@ -17,7 +17,14 @@ from blog.resources.common import make_exception_response
 class Posts(Resource):
     """Класс для работы с постами."""
 
-    @swagger.operation()
+    @swagger.operation(
+        responseMessages=[
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
+        ]
+    )
     def get(self):
         """GET запрос для получения всех постов.
 
