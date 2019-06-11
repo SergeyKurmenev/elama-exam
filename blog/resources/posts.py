@@ -58,17 +58,55 @@ class Posts(Resource):
             result.append(post.to_dict())
         return jsonify(result)
 
-    @swagger.operation()
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "user_id",
+                "description": "Id пользователя создающего пост",
+                "in": "query",
+                "dataType": "integer",
+                "paramType": "form"
+            },
+            {
+                "name": "title",
+                "description": "Заголовок поста",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            },
+            {
+                "name": "text",
+                "description": "Текст поста",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            },
+            {
+                "name": "is_draft",
+                "description": "Пометка 'черновик'(опционально, boolean значение)",
+                "in": "query",
+                "dataType": "boolean",
+                "paramType": "form"
+            },
+            {
+                "name": "tag",
+                "description": "Тэг поста (опционально)",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            },
+        ]
+    )
     def post(self):
         """POST запрос для добавления поста/черновика.
 
         Принимает JSON с информацией для создания поста.
 
         {
-        'user_id':  str,
+        'user_id':  int,
         'title':    str,
-        'body':     str,
-        'is_draft': str,
+        'text':     str,
+        'is_draft': bool,
         'tag':      str
         }
 
@@ -99,7 +137,7 @@ class Posts(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('user_id')
         parser.add_argument('title')
-        parser.add_argument('body')
+        parser.add_argument('text')
         parser.add_argument('is_draft')
         parser.add_argument('tag')
 
@@ -115,7 +153,7 @@ class Posts(Resource):
         try:
             add_post(user_id=args['user_id'],
                      title=args['title'],
-                     body=args['body'],
+                     body=args['text'],
                      is_draft=is_draft,
                      tag=args['tag'])
 
