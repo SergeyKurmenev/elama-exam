@@ -22,6 +22,7 @@ class Statistic(Resource):
         Статистика возвращается в виде:
 
         {
+        'total':       int,
         'draft_count': int,
         'post_count':  int
         }
