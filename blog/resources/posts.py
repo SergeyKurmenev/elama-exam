@@ -170,14 +170,24 @@ class Posts(Resource):
 
         return Response(status=201)
 
-    @swagger.operation()
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "posts_id",
+                "description": "Id удаляемого поста(при удалении нескольких - id печисляются через ',')",
+                "in": "query",
+                "dataType": "integer",
+                "paramType": "form"
+            }
+        ]
+    )
     def delete(self):
-        """DELETE метод для удаления постов.
+        """DELETE запрос для удаления постов.
 
         Принимает JSON с id постов, которые необходимо удалить.
 
         {
-        'posts_id':  str
+        'posts_id':  int
         }
 
         posts_id - id постов для удаления.
