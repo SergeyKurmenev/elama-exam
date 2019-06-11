@@ -42,3 +42,4 @@ try:
 except SQLAlchemyError as e:
     print('Не удалось записать занные в БД.'
           f'Причина: {str(e)}')
+
