@@ -10,19 +10,19 @@ def post():
 @click.command(help='Метод создания нового поста')
 @click.option('--user-id', '-i', help='Id пользователя, который добавляет пост')
 @click.option('--title', '-t', help='Заголовок поста')
-@click.option('--body', '-b', help='Текст поста')
+@click.option('--text', '-T', help='Текст поста')
 @click.option('--is-draft', '-D', help='Пометка "черновик"(опциональный параметр, '
                                        'что бы сохранить черновик - необходимо установить "True")')
-@click.option('--tag', '-T', help='Тэг категории к которому причислить пост(опционально)')
-def make_post(user_id, title, body, is_draft, tag):
+@click.option('--tag', help='Тэг категории к которому причислить пост(опционально)')
+def make_post(user_id, title, text, is_draft, tag):
     data = {}
 
     if user_id:
         data["user_id"] = user_id
     if title:
         data["title"] = title
-    if body:
-        data["body"] = body
+    if text:
+        data["text"] = text
     if is_draft:
         data["is_draft"] = is_draft
     if tag:

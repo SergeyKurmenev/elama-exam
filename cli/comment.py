@@ -11,8 +11,8 @@ def comment():
 @click.option('--post-id', '-i', help='Id поста к которому относится комментарий')
 @click.option('--email', '-e', help='Email оставившего комментарий')
 @click.option('--name', '-n', help='Имя оставившего комментарий')
-@click.option('--body', '-b', help='Текст комментария')
-def make_comment(post_id, email, name, body):
+@click.option('--text', '-t', help='Текст комментария')
+def make_comment(post_id, email, name, text):
     data = {}
 
     if post_id:
@@ -21,8 +21,8 @@ def make_comment(post_id, email, name, body):
         data['email'] = email
     if name:
         data['name'] = name
-    if body:
-        data['body'] = body
+    if text:
+        data['text'] = text
 
     response = requests.post('http://127.0.0.1:5000/api/v1/comments', data=data)
 
