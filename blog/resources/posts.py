@@ -95,6 +95,18 @@ class Posts(Resource):
                 "dataType": "string",
                 "paramType": "form"
             },
+        ],
+        responseMessages=[
+            {
+                "code": 409,
+                "message": "Конфликт при попытке создания"
+                           "(текст зависит от конкретной причины - "
+                           "присланы не корректные данные/не пройдена валидация данных)"
+            },
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
         ]
     )
     def post(self):
