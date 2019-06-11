@@ -32,6 +32,16 @@ class Categories(Resource):
                 "dataType": "string",
                 "paramType": "form"
             }
+        ],
+        responseMessages=[
+            {
+                "code": 409,
+                "message": "Не корректные данные, возможно такая категория или тэг уже заняты"
+            },
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
         ]
     )
     def post(self):
