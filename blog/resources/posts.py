@@ -125,14 +125,31 @@ class Posts(Resource):
 
         return Response(status=201)
 
-    @swagger.operation()
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "post_id",
+                "description": "Id поста которому необходимо сменить тэг",
+                "in": "query",
+                "dataType": "integer",
+                "paramType": "form"
+            },
+            {
+                "name": "tag",
+                "description": "Новый тэг поста(должна существовать категория с данным тэгом)",
+                "in": "query",
+                "dataType": "string",
+                "paramType": "form"
+            }
+        ]
+    )
     def put(self):
-        """PUT метод для добавления/редактирования тэга поста.
+        """PUT запрос для добавления/редактирования тэга поста.
 
         Принимает JSON с информацией для замены тэга.
 
         {
-        'post_id': str,
+        'post_id': int,
         'tag':     str
         }
 
