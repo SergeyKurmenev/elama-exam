@@ -30,6 +30,7 @@ class Statistic(Resource):
 
         {
         'categories_count':      int,
+        'comment_count':         int,
         'draft_count':           int,
         'post_count':            int,
         'total_in_posts_table':  int
