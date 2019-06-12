@@ -127,3 +127,34 @@ def change_category(category_id: int, name: str = None, tag: str = None):
         refresh_tag(old_tag=old_tag,
                     new_tag=tag)
 
+
+def delete_category(category_id: int):
+    """Метод удаления категории.
+
+    В качестве входного параметра принимает id категории,
+    которую необходимо удалить.
+
+    category_id: int
+
+    В случае ошибки при обращении к БД происходит
+    raise Exception с сообщением, соответствующим причине ошибки.
+
+    """
+
+    try:
+        category_for_delete = Category.query.filter(Category.id == category_id).one()
+        refresh_tag(category_for_delete.tag, None)
+
+        db.session.delete(category_for_delete)
+        db.session.commit()
+
+    except NoResultFound as e:
+        logger.warning(f'Удаление категории с id: {category_id} не удалось. '
+                       f'Причина: категория не найдена. Error massage: "{str(e)}"')
+        raise Exception('Проверьте корректость id удаляемой категории.')
+
+    except SQLAlchemyError as e:
+        logger.warning(f'Удаление категории с id: {category_id} не удалось. '
+                       f'Причина: "{str(e)}"')
+        raise Exception('БД временно недоступна')
+
