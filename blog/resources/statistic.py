@@ -4,7 +4,7 @@ from flask_restful import Resource
 
 from flask_restful_swagger import swagger
 
-from blog.db_utils.posts import get_statistic
+from blog.db_utils.statistic import get_statistic
 
 from blog.resources.common import make_exception_response
 
