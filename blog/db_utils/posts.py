@@ -1,10 +1,10 @@
+from loguru import logger
+
+from sqlalchemy.exc import DataError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.exc import DataError
 
 from sqlalchemy.orm.exc import NoResultFound
-
-from loguru import logger
 
 from blog import db
 
