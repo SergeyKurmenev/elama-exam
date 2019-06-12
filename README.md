@@ -12,8 +12,15 @@
 
 - [В виде JSON](http://localhost:5000/api/spec.json)
 
-
 ---
+Тестовые данные, используемые, для заполнения бд:
+
+- [Посты](https://jsonplaceholder.typicode.com/posts)
+
+- [Комментарии](https://jsonplaceholder.typicode.com/comments)
+---
+
+## Дальнейшая информация временно неактуальна в связи с переходом с `SQLite` на `PostgreSQL`. Скоро будет обновлена.
 
 ### Скрипт полной сборки и запуска
 
@@ -113,11 +120,5 @@ python fill_db_with_demo_data.py
 С помощью данного скрипта в БД добавляется 100 постов и
 500 комментариев к ним.
 
----
-Тестовые данные, используемые, для заполнения бд:
 
-- [Посты](https://jsonplaceholder.typicode.com/posts)
-
-- [Комментарии](https://jsonplaceholder.typicode.com/comments)
----
 
