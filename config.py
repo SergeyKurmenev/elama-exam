@@ -5,7 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'blog.db')
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:example@127.0.0.1:5432'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     POST_TITLE_MAX_LENGTH = 100
