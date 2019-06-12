@@ -6,8 +6,9 @@ from flask_restful import reqparse
 
 from flask_restful_swagger import swagger
 
-from blog.db_utils.categories import change_category
 from blog.db_utils.categories import add_category
+from blog.db_utils.categories import change_category
+from blog.db_utils.categories import delete_category
 from blog.db_utils.categories import get_all_categories
 
 from blog.resources.common import make_exception_response
@@ -220,4 +221,39 @@ class Categories(Resource):
             return response
 
         return jsonify(result)
+
+    def delete(self):
+        """DELETE запрос для удаления категории.
+
+        Принимает JSON с id категории которую необходимо удалить.
+
+        {
+        'category_id':  int
+        }
+
+        В случае ошибки возвращает сообщение соответствующее
+        типу ошибки в виде JSON и соответствующий код:
+
+        {
+        'status': str
+        }
+
+        Status code:
+
+        При невозможности подключения к БД - 503
+        При отсутствии удаляемой категории - 409
+
+        """
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('category_id')
+        args = parser.parse_args()
+
+        try:
+            delete_category(category_id=args['category_id'])
+        except Exception as e:
+            response = make_exception_response(str(e))
+            return response
+
+        return Response(status=200)
 
