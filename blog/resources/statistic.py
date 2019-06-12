@@ -29,9 +29,10 @@ class Statistic(Resource):
         Статистика возвращается в виде:
 
         {
-        'total':       int,
-        'draft_count': int,
-        'post_count':  int
+        'categories_count':      int,
+        'draft_count':           int,
+        'post_count':            int,
+        'total_in_posts_table':  int
         }
 
         В случае ошибки возвращает сообщение соответствующее
