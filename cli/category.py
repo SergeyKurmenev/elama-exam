@@ -60,9 +60,27 @@ def change_category(category_id, name, tag):
         click.echo(response.json())
 
 
+@click.command(help='Метод удаления категории')
+@click.option('--category-id', '-i', help='Id категории, которую необходимо удалить')
+def delete_category(category_id):
+    data = {}
+
+    if category_id:
+        data['category_id'] = category_id
+
+    response = requests.delete('http://127.0.0.1:5000/api/v1/categories', data=data)
+
+    if response.ok:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
+    else:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+        click.echo(response.json())
+
+
 category.add_command(change_category)
-category.add_command(make_category)
+category.add_command(delete_category)
 category.add_command(get_categories)
+category.add_command(make_category)
 
 
 if __name__ == '__main__':
