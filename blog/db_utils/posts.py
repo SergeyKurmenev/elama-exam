@@ -47,14 +47,6 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     Попытки сохранить строку в поле, которое было определено как Integer 
     так же не вызывают ошибок.'''
 
-    # Валидация поля title
-    if title and len(title) >= Config.POST_TITLE_MAX_LENGTH:
-        warning_massage = 'Не удалось создать новый пост. ' \
-                          'Причина: превышено количество символов в заголовке. ' \
-                          f'Максимально допустимое количество символов: {Config.POST_TITLE_MAX_LENGTH}'
-        logger.warning(warning_massage)
-        raise Exception(warning_massage)
-
     # Валидация поля body
     if body and len(body) >= Config.POST_BODY_MAX_LENGTH:
         warning_massage = 'Не удалось создать новый пост. ' \
@@ -100,6 +92,11 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
                        f'Причина: {str(e)}')
         if 'InvalidTextRepresentation' in str(e):
             raise Exception('Проверьте корректность поля user_id.')
+        elif 'StringDataRightTruncation' in str(e):
+            raise Exception('Ошибка при попытке создания поста. '
+                            'Проверьте количество символов в заголовке. '
+                            f'Максимально допустимое значение для заголовка - '
+                            f'{Config.POST_TITLE_MAX_LENGTH} символов.')
 
     except SQLAlchemyError as e:
         db.session.rollback()
