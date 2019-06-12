@@ -45,9 +45,9 @@ for comment in comments:
     db.session.add(comment_for_add)
 
 for draft in posts:
-    draft_for_add = Post(user_id=post['userId'],
-                         title=post['title'],
-                         body=post['body'],
+    draft_for_add = Post(user_id=draft['userId'],
+                         title=draft['title'],
+                         body=draft['body'],
                          is_draft=True)
 
     db.session.add(draft_for_add)
