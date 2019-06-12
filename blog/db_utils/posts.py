@@ -38,26 +38,7 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     raise Exception с сообщением, соответствующим причине ошибки.
 
     """
-# =============================
 
-    '''Вид данной части кода обусловлен особенностью используемой БД(SQLite).
-    В данной БД нет возможности ограничить длину записываемой строки и, как следствие, 
-    невозможно получить IntegrityError при записи более длинной строки, чем указана 
-    в описании БД(в файле models.py).
-    Попытки сохранить строку в поле, которое было определено как Integer 
-    так же не вызывают ошибок.'''
-
-    # Валидация поля body
-    if body and len(body) >= Config.POST_BODY_MAX_LENGTH:
-        warning_massage = 'Не удалось создать новый пост. ' \
-                          'Причина: превышено количество символов в тексте сообщения. ' \
-                          f'Максимально допустимое количество символов: {Config.POST_BODY_MAX_LENGTH}'
-        logger.warning(warning_massage)
-        raise Exception(warning_massage)
-
-# =============================
-
-    # Добавление поста, созданного из предоставленных данных, в БД
     try:
 
         # Проверка существования категории с данным тэгом
@@ -94,9 +75,10 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
             raise Exception('Проверьте корректность поля user_id.')
         elif 'StringDataRightTruncation' in str(e):
             raise Exception('Ошибка при попытке создания поста. '
-                            'Проверьте количество символов в заголовке. '
-                            f'Максимально допустимое значение для заголовка - '
-                            f'{Config.POST_TITLE_MAX_LENGTH} символов.')
+                            'Проверьте количество символов в заголовке и тексте поста. '
+                            'Максимально допустимое значение для заголовка - '
+                            f'{Config.POST_TITLE_MAX_LENGTH} символов, '
+                            f'для текста - {Config.POST_BODY_MAX_LENGTH} символов.')
 
     except SQLAlchemyError as e:
         db.session.rollback()
