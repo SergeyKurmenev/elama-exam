@@ -222,6 +222,27 @@ class Categories(Resource):
 
         return jsonify(result)
 
+    @swagger.operation(
+        parameters=[
+            {
+                "name": "category_id",
+                "description": "Id удаляемой категории",
+                "in": "query",
+                "dataType": "integer",
+                "paramType": "form"
+            }
+        ],
+        responseMessages=[
+            {
+                "code": 409,
+                "message": "Проверьте корректость id удаляемой категории."
+            },
+            {
+                "code": 503,
+                "message": "БД временно недоступна"
+            }
+        ]
+    )
     def delete(self):
         """DELETE запрос для удаления категории.
 
