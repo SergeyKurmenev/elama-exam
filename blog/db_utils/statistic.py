@@ -3,6 +3,7 @@ from loguru import logger
 from sqlalchemy.exc import SQLAlchemyError
 
 from blog.models import Category
+from blog.models import Comment
 from blog.models import Post
 
 
@@ -13,6 +14,7 @@ def get_statistic():
 
     {
     'categories_count':      int,
+    'comment_count':         int,
     'draft_count':           int,
     'post_count':            int,
     'total_in_posts_table':  int
@@ -27,6 +29,7 @@ def get_statistic():
     """
 
     statistic = {'categories_count': None,
+                 'comment_count': None,
                  'draft_count': None,
                  'post_count': None,
                  'total_in_posts_table': None}
@@ -42,6 +45,9 @@ def get_statistic():
 
         categories_count = Category.query.count()
         statistic['categories_count'] = categories_count
+
+        comment_count = Comment.query.count()
+        statistic['comment_count'] = comment_count
 
     except SQLAlchemyError as e:
         logger.warning(f'Не удалось получить статистику. Причина: {str(e)}')
