@@ -42,7 +42,7 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     try:
 
         # Проверка существования категории с данным тэгом
-        if not Category.query.filter(Category.tag == tag).count():
+        if tag and not Category.query.filter(Category.tag == tag).count():
             raise NoResultFound(f'Категория с тэгом {tag} не найдена')
 
         post_for_add = Post(user_id=user_id,
