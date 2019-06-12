@@ -1,9 +1,10 @@
+from loguru import logger
+
+from sqlalchemy.exc import DataError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
 from sqlalchemy.orm.exc import NoResultFound
-
-from loguru import logger
 
 from blog import db
 
@@ -37,7 +38,6 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     raise Exception с сообщением, соответствующим причине ошибки.
 
     """
-
 # =============================
 
     '''Вид данной части кода обусловлен особенностью используемой БД(SQLite).
@@ -46,14 +46,6 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
     в описании БД(в файле models.py).
     Попытки сохранить строку в поле, которое было определено как Integer 
     так же не вызывают ошибок.'''
-
-    # Проверка корректности предоставленного user_id
-    try:
-        user_id = int(user_id)
-    except Exception as e:
-        logger.warning(f'Не удалось создать пост. Не корректный user_id: {user_id}')
-        raise Exception('Не удалось создать новый пост с предоставленными данными. '
-                        'Проверьте корректность поля user_id.')
 
     # Валидация поля title
     if title and len(title) >= Config.POST_TITLE_MAX_LENGTH:
@@ -101,6 +93,13 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
                        f"Причина: {str(e)}")
         raise Exception("Не корректные данные. "
                         "Проверьте наличие всех обязательных полей в запросе.")
+
+    except DataError as e:
+        db.session.rollback()
+        logger.warning('Не удалось создать новый пост. '
+                       f'Причина: {str(e)}')
+        if 'InvalidTextRepresentation' in str(e):
+            raise Exception('Проверьте корректность поля user_id.')
 
     except SQLAlchemyError as e:
         db.session.rollback()
