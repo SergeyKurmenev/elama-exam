@@ -2,6 +2,7 @@ from loguru import logger
 
 from sqlalchemy.exc import SQLAlchemyError
 
+from blog.models import Category
 from blog.models import Post
 
 
@@ -11,8 +12,10 @@ def get_statistic():
     Возвращает словарь из двух элементов: количество постов и количество черновиков.
 
     {
-    post_count:  int,
-    draft_count: int
+    'categories_count':      int,
+    'draft_count':           int,
+    'post_count':            int,
+    'total_in_posts_table':  int
     }
 
     В случае возникновения ошибки при обращении к БД - вмето значения,
@@ -23,9 +26,10 @@ def get_statistic():
 
     """
 
-    statistic = {'total': None,
+    statistic = {'categories_count': None,
+                 'draft_count': None,
                  'post_count': None,
-                 'draft_count': None}
+                 'total_in_posts_table': None}
 
     try:
         post_count = Post.query.filter(Post.is_draft == False).count()
@@ -34,7 +38,10 @@ def get_statistic():
         draft_count = Post.query.filter(Post.is_draft == True).count()
         statistic['draft_count'] = draft_count
 
-        statistic['total'] = post_count + draft_count
+        statistic['total_in_posts_table'] = post_count + draft_count
+
+        categories_count = Category.query.count()
+        statistic['categories_count'] = categories_count
 
     except SQLAlchemyError as e:
         logger.warning(f'Не удалось получить статистику. Причина: {str(e)}')
