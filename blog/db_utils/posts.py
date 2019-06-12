@@ -8,6 +8,8 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from blog import db
 
+from blog.db_utils.comments import get_all_comments_for_post
+
 from blog.models import Category
 from blog.models import Post
 
@@ -133,7 +135,12 @@ def delete_posts(*args: int):
         for post_id in args:
             try:
                 post = Post.query.filter(Post.id == post_id).one()
+                comments = get_all_comments_for_post(post_id)
+
                 db.session.delete(post)
+                for comment in comments:
+                    db.session.delete(comment)
+
             except NoResultFound as e:
                 logger.warning(f'Пост c id: {post_id} не удалён. '
                                f'Причина: {str(e)}')
