@@ -45,6 +45,12 @@ def add_comment(post_id: int, email: str, name: str, body: str):
         db.session.add(comment_for_add)
         db.session.commit()
 
+    except DataError as e:
+        logger.warning('Не удалось создать комментарий. '
+                       f'Причина: {str(e)}.')
+        raise Exception('Не удалось создать комментарий. '
+                        'Причина: не корректный id поста.')
+
     except NoResultFound:
         warning_massage = 'Не удалось создать комментарий. ' \
                           f'Причина: пост с id: {post_id} не найден.'
