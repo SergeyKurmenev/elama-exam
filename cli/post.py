@@ -35,7 +35,9 @@ def make_post(user_id, title, text, is_draft, tag):
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
-        click.echo(response.json())
+        click.echo(json.dumps(obj=response.json(),
+                              indent=2,
+                              sort_keys=True))
 
 
 @click.command(help='Метод добавления/изменения тэга поста')
@@ -55,7 +57,9 @@ def change_tag(post_id, tag):
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
-        click.echo(response.json())
+        click.echo(json.dumps(obj=response.json(),
+                              indent=2,
+                              sort_keys=True))
 
 
 @click.command(help='Метод удаления постов')
@@ -73,7 +77,9 @@ def delete_posts(posts_id):
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
-        click.echo(response.json())
+        click.echo(json.dumps(obj=response.json(),
+                              indent=2,
+                              sort_keys=True))
 
 
 @click.command(help='Метод получения всех постов')

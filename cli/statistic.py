@@ -1,4 +1,5 @@
 import click
+import json
 import requests
 
 
@@ -16,7 +17,9 @@ def get_statistic():
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
 
-    click.echo(response.json())
+    click.echo(json.dumps(obj=response.json(),
+                          indent=2,
+                          sort_keys=True))
 
 
 statistic.add_command(get_statistic)
