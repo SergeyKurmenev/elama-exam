@@ -159,9 +159,15 @@ def delete_category(category_id: int):
         db.session.delete(category_for_delete)
         db.session.commit()
 
+    except DataError as e:
+        logger.warning('Ошибка при попытке удаления категории. '
+                       f'Причина: не корректный id - {category_id}. '
+                       f'Error message: {str(e)}')
+        raise Exception('Проверьте корректость id удаляемой категории.')
+
     except NoResultFound as e:
         logger.warning(f'Удаление категории с id: {category_id} не удалось. '
-                       f'Причина: категория не найдена. Error massage: "{str(e)}"')
+                       f'Причина: категория не найдена. Error message: "{str(e)}"')
         raise Exception('Проверьте корректость id удаляемой категории.')
 
     except SQLAlchemyError as e:
