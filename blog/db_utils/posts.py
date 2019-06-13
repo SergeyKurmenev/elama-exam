@@ -181,6 +181,12 @@ def change_post_tag(post_id: int, tag: str):
 
         db.session.commit()
 
+    except DataError as e:
+        logger.warning(f'Тэг для поста с id: {post_id}  на новый тэг "{tag}" не изменён. '
+                       f'Причина: {str(e)} ')
+        raise Exception('Не удалось заменить тэг поста. '
+                        'Причина: не корректный id поста.')
+
     except NoResultFound as e:
         logger.warning(f'Тэг для поста с id: {post_id}  на новый тэг "{tag}" не изменён. '
                        f'Причина: {str(e)} ')
