@@ -1,5 +1,6 @@
 from loguru import logger
 
+from sqlalchemy.exc import DataError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -82,6 +83,12 @@ def get_all_comments_for_post(post_id: int):
             raise NoResultFound('Пост не найден')
 
         comments = Comment.query.filter(Comment.post_id == post_id).all()
+
+    except DataError as e:
+        logger.warning(f'Не удалось получить комментарии адресованные посту с id: {post_id}. '
+                       f'Причина: {str(e)}.')
+        raise Exception('Не удалось получить комментарии адресованные посту. '
+                        f'Причина: Не корректный id - {post_id}.')
 
     except NoResultFound as e:
         logger.warning(f'Не удалось получить комментарии адресованные посту с id: {post_id}. '
