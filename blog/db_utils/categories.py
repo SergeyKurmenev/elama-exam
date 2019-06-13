@@ -1,3 +1,4 @@
+from sqlalchemy.exc import DataError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -105,6 +106,12 @@ def change_category(category_id: int, name: str = None, tag: str = None):
             category_for_change.tag = tag
 
         db.session.commit()
+
+    except DataError as e:
+        logger.warning(f'Редактирование категории с id: {category_id} не удалось. '
+                       f'Причина: {str(e)}')
+        raise Exception('Ошибка при попытке редактирования. '
+                        'Не корректный id категории.')
 
     except NoResultFound as e:
         logger.warning(f'Редактирование категории с id: {category_id} не удалось. '
