@@ -93,16 +93,18 @@ def get_all_posts():
 
     Возвращает список всех постов(список объектов Post),
     не отмеченных как "черновик".
-
-    [ {id:       int,
-      user_id:   int,
-      title:     str,
-      body:      str,
-      is_draft:  bool,
-      tag:       str
-      },
-      ... ,
-      {} ]
+    [
+        {
+        id:        int,
+        user_id:   int,
+        title:     str,
+        body:      str,
+        is_draft:  bool,
+        tag:       str
+        },
+        ... ,
+        {}
+    ]
 
     В случае ошибки при обращении к БД происходит
     raise Exception с сообщением, соответствующим причине ошибки.
