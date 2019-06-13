@@ -73,14 +73,15 @@ def add_post(user_id: int, title: str, body: str, is_draft: bool = False, tag: s
         db.session.rollback()
         logger.warning('Не удалось создать новый пост. '
                        f'Причина: {str(e)}')
-        if 'InvalidTextRepresentation' in str(e):
-            raise Exception('Проверьте корректность поля user_id.')
-        elif 'StringDataRightTruncation' in str(e):
+        if 'StringDataRightTruncation' in str(e):
             raise Exception('Ошибка при попытке создания поста. '
                             'Проверьте количество символов в заголовке и тексте поста. '
                             'Максимально допустимое значение для заголовка - '
                             f'{Config.POST_TITLE_MAX_LENGTH} символов, '
                             f'для текста - {Config.POST_BODY_MAX_LENGTH} символов.')
+
+        else:
+            raise Exception('Проверьте корректность поля user_id.')
 
     except SQLAlchemyError as e:
         db.session.rollback()
