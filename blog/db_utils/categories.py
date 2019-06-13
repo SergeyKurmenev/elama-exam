@@ -39,7 +39,11 @@ def add_category(name: str, tag: str):
     except IntegrityError as e:
         db.session.rollback()
         logger.warning(f'Не удалось добавить новую категорию в БД. Причина: {str(e)}')
-        raise Exception('Не корректные данные, возможно такая категория или тэг уже заняты')
+        if 'NotNullViolation' in str(e):
+            raise Exception('Не корректные данные. '
+                            'Не все обязательные поля заполнены.')
+        raise Exception('Не корректные данные. '
+                        'Возможно такая категория или тэг уже заняты')
 
     except SQLAlchemyError as e:
         db.session.rollback()
