@@ -148,6 +148,11 @@ def delete_posts(*args: int):
 
         db.session.commit()
 
+    except DataError as e:
+        logger.warning(f'Ошибка при попытке удаления постов: {[*args]}. '
+                       f'Причина: {str(e)}.')
+        raise Exception('Проверьте корректность параметра posts_id')
+
     except SQLAlchemyError as e:
         logger.warning(f'Ошибка при попытке удаления постов: {[*args]}. '
                        f'Причина: {str(e)}.')
