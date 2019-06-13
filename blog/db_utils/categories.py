@@ -16,12 +16,10 @@ from blog.db_utils.posts import refresh_tag
 def add_category(name: str, tag: str):
     """Метод добавления новой категории в БД.
 
-    В качестве входных параметров принимает список: имя категории и тэг категории.
+    В качестве входных параметров принимает:
 
-    {
-    name:  str,
-    tag:   str
-    }
+    name:  str  -  Имя категории
+    tag:   str  -  Тэг категории
 
     При невозможности записи в БД просиходит raise Exception
     с сообщением, соответствующим причине ошибки.
@@ -39,9 +37,11 @@ def add_category(name: str, tag: str):
     except IntegrityError as e:
         db.session.rollback()
         logger.warning(f'Не удалось добавить новую категорию в БД. Причина: {str(e)}')
+
         if 'NotNullViolation' in str(e):
             raise Exception('Не корректные данные. '
                             'Не все обязательные поля заполнены.')
+
         raise Exception('Не корректные данные. '
                         'Возможно такая категория или тэг уже заняты')
 
@@ -55,7 +55,6 @@ def get_all_categories():
     """Метод получения списка всех категорий из БД.
 
     Возвращает список всех категорий(список объектов Category).
-
     [
       {
       id:    int,
@@ -83,15 +82,11 @@ def get_all_categories():
 def change_category(category_id: int, name: str = None, tag: str = None):
     """Метод редактирования категории.
 
-    В качестве входных параметров принимает список:
-    id категории(которую редактировать), name - новое имя, tag - новый тэг.
+    В качестве входных параметров принимает:
 
-    category_id:  int,
-    name:         str,
-    tag:          str
-
-    name - опционально(default=None - имя сохраняется старое)
-    tag - опционально(default=None - тэг сохраняется старый)
+    category_id:  int  -  id категории, которую необходимо отредактировать
+    name:         str  -  новое имя - опционально(default=None - имя сохраняется старое)
+    tag:          str  -  новый тэг - опционально(default=None - тэг сохраняется старый)
 
     В случае ошибки при обращении к БД происходит
     raise Exception с сообщением, соответствующим причине ошибки.
@@ -133,8 +128,9 @@ def change_category(category_id: int, name: str = None, tag: str = None):
                        f'Причина: "{str(e)}"')
         raise Exception('БД временно недоступна')
 
+    # обновление тэга во всех постах, которые на него ссылались,
+    # если редактировался тэг
     if old_tag:
-        # обновление тэга во всех постах, которые на него ссылались
         refresh_tag(old_tag=old_tag,
                     new_tag=tag)
 
@@ -142,10 +138,9 @@ def change_category(category_id: int, name: str = None, tag: str = None):
 def delete_category(category_id: int):
     """Метод удаления категории.
 
-    В качестве входного параметра принимает id категории,
-    которую необходимо удалить.
+    В качестве входного параметра принимает:
 
-    category_id: int
+    category_id:  int  -  id категории, которую необходимо удалить
 
     В случае ошибки при обращении к БД происходит
     raise Exception с сообщением, соответствующим причине ошибки.
