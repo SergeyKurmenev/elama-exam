@@ -74,7 +74,7 @@ class Category(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(Config.CATEGORY_NAME_MAX_LENGTH), nullable=False, unique=True)
-    tag = db.Column(db.String(Config.TAG_MAX_LENGTH), nullable=True, unique=True)
+    tag = db.Column(db.String(Config.TAG_MAX_LENGTH), nullable=False, unique=True)
 
     def __init__(self,
                  name: str,
