@@ -149,7 +149,7 @@ def delete_category(category_id: int):
 
     try:
         category_for_delete = Category.query.filter(Category.id == category_id).one()
-        refresh_tag(category_for_delete.tag, None)
+        deleted_tag = category_for_delete.tag
 
         db.session.delete(category_for_delete)
         db.session.commit()
@@ -169,4 +169,6 @@ def delete_category(category_id: int):
         logger.warning(f'Удаление категории с id: {category_id} не удалось. '
                        f'Причина: "{str(e)}"')
         raise Exception('БД временно недоступна')
+
+    refresh_tag(deleted_tag, None)
 
