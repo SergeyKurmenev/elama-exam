@@ -185,7 +185,7 @@ def change_post_tag(post_id: int, tag: str):
         logger.warning(f'Тэг для поста с id: {post_id}  на новый тэг "{tag}" не изменён. '
                        f'Причина: {str(e)} ')
         raise Exception('Не удалось заменить тэг поста. '
-                        'Не корректный id поста.')
+                        'Причина: не корректный id поста.')
 
     except NoResultFound as e:
         logger.warning(f'Тэг для поста с id: {post_id}  на новый тэг "{tag}" не изменён. '
