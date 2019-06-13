@@ -1,4 +1,5 @@
 import click
+import json
 import requests
 
 
@@ -75,6 +76,21 @@ def delete_posts(posts_id):
         click.echo(response.json())
 
 
+@click.command(help='Метод получения всех постов')
+def get_all_posts():
+    response = requests.get('http://127.0.0.1:5000/api/v1/posts')
+
+    if response.ok:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
+    else:
+        click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
+
+    click.echo(json.dumps(obj=response.json(),
+                          indent=2,
+                          sort_keys=True))
+
+
+post.add_command(get_all_posts)
 post.add_command(make_post)
 post.add_command(change_tag)
 post.add_command(delete_posts)
