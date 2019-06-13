@@ -138,10 +138,9 @@ def change_category(category_id: int, name: str = None, tag: str = None):
 def delete_category(category_id: int):
     """Метод удаления категории.
 
-    В качестве входного параметра принимает id категории,
-    которую необходимо удалить.
+    В качестве входного параметра принимает:
 
-    category_id: int
+    category_id:  int  -  id категории, которую необходимо удалить
 
     В случае ошибки при обращении к БД происходит
     raise Exception с сообщением, соответствующим причине ошибки.
