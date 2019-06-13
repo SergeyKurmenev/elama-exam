@@ -173,7 +173,7 @@ def change_post_tag(post_id: int, tag: str):
     try:
 
         # Проверка на существование категории с данным тэгом
-        if not Category.query.filter(Category.tag == tag).count():
+        if tag and not Category.query.filter(Category.tag == tag).count():
             raise NoResultFound(f'Категория с тэгом {tag} не найдена')
 
         post_for_change_tag = Post.query.filter(Post.id == post_id).one()
