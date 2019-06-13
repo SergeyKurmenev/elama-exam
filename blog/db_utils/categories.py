@@ -82,15 +82,11 @@ def get_all_categories():
 def change_category(category_id: int, name: str = None, tag: str = None):
     """Метод редактирования категории.
 
-    В качестве входных параметров принимает список:
-    id категории(которую редактировать), name - новое имя, tag - новый тэг.
+    В качестве входных параметров принимает:
 
-    category_id:  int,
-    name:         str,
-    tag:          str
-
-    name - опционально(default=None - имя сохраняется старое)
-    tag - опционально(default=None - тэг сохраняется старый)
+    category_id:  int  -  id категории, которую необходимо отредактировать
+    name:         str  -  новое имя - опционально(default=None - имя сохраняется старое)
+    tag:          str  -  новый тэг - опционально(default=None - тэг сохраняется старый)
 
     В случае ошибки при обращении к БД происходит
     raise Exception с сообщением, соответствующим причине ошибки.
@@ -132,8 +128,9 @@ def change_category(category_id: int, name: str = None, tag: str = None):
                        f'Причина: "{str(e)}"')
         raise Exception('БД временно недоступна')
 
+    # обновление тэга во всех постах, которые на него ссылались,
+    # если редактировался тэг
     if old_tag:
-        # обновление тэга во всех постах, которые на него ссылались
         refresh_tag(old_tag=old_tag,
                     new_tag=tag)
 
