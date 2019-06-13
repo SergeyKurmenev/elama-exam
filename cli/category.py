@@ -81,7 +81,9 @@ def delete_category(category_id):
         click.echo(click.style(f"Status code: {response.status_code}", fg='green'))
     else:
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
-        click.echo(response.json())
+        click.echo(json.dumps(obj=response.json(),
+                              indent=2,
+                              sort_keys=True))
 
 
 category.add_command(change_category)
