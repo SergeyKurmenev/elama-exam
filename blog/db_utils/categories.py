@@ -16,12 +16,10 @@ from blog.db_utils.posts import refresh_tag
 def add_category(name: str, tag: str):
     """Метод добавления новой категории в БД.
 
-    В качестве входных параметров принимает список: имя категории и тэг категории.
+    В качестве входных параметров принимает:
 
-    {
-    name:  str,
-    tag:   str
-    }
+    name:  str  -  Имя категории
+    tag:   str  -  Тэг категории
 
     При невозможности записи в БД просиходит raise Exception
     с сообщением, соответствующим причине ошибки.
@@ -39,9 +37,11 @@ def add_category(name: str, tag: str):
     except IntegrityError as e:
         db.session.rollback()
         logger.warning(f'Не удалось добавить новую категорию в БД. Причина: {str(e)}')
+
         if 'NotNullViolation' in str(e):
             raise Exception('Не корректные данные. '
                             'Не все обязательные поля заполнены.')
+
         raise Exception('Не корректные данные. '
                         'Возможно такая категория или тэг уже заняты')
 
