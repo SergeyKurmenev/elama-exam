@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # Создание БД
-cd ./db
-docker-compose up -d
-cd ..
+source ./bin/create_db.sh
 
 # Создание и активация виртуального окружения
 source ./bin/deploy_virtualenv.sh
