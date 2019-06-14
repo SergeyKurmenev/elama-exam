@@ -148,7 +148,7 @@ source ./bin/create_db.sh
 source venv/bin/activate
 ```
 
-#####Далее выполнить скрипт:
+##### Далее выполнить скрипт:
 
 ```bash
 source ./bin/prepare_db.sh
