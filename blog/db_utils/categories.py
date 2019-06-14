@@ -1,16 +1,16 @@
+from loguru import logger
+
 from sqlalchemy.exc import DataError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 
 from sqlalchemy.orm.exc import NoResultFound
 
-from loguru import logger
-
 from blog import db
 
-from blog.models import Category
-
 from blog.db_utils.posts import refresh_tag
+
+from blog.models import Category
 
 
 def add_category(name: str, tag: str):
