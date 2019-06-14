@@ -94,6 +94,7 @@ python cli/<Название тестируемой части>.py
 ```bash
 python cli/post.py delete-posts --help
 ```
+---
 
 ### Скрипт для полной сборки приложения
 
