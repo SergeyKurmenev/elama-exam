@@ -33,7 +33,8 @@ def make_comment(post_id, email, name, text):
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
         click.echo(json.dumps(obj=response.json(),
                               indent=2,
-                              sort_keys=True))
+                              sort_keys=True,
+                              ensure_ascii=False))
 
 
 @click.command(help='Получение всех комментариев поста')
@@ -53,7 +54,8 @@ def get_comments(post_id):
 
     click.echo(json.dumps(obj=response.json(),
                           indent=2,
-                          sort_keys=True))
+                          sort_keys=True,
+                          ensure_ascii=False))
 
 
 comment.add_command(make_comment)

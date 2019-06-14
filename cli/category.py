@@ -23,7 +23,8 @@ def make_category(name, tag):
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
         click.echo(json.dumps(obj=response.json(),
                               indent=2,
-                              sort_keys=True))
+                              sort_keys=True,
+                              ensure_ascii=False))
 
 
 @click.command(help='Метод получения всех категорий')
@@ -37,7 +38,8 @@ def get_categories():
 
     click.echo(json.dumps(obj=response.json(),
                           indent=2,
-                          sort_keys=True))
+                          sort_keys=True,
+                          ensure_ascii=False))
 
 
 @click.command(help='Метод редактирования категорий')
@@ -64,7 +66,8 @@ def change_category(category_id, name, tag):
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
         click.echo(json.dumps(obj=response.json(),
                               indent=2,
-                              sort_keys=True))
+                              sort_keys=True,
+                              ensure_ascii=False))
 
 
 @click.command(help='Метод удаления категории')
@@ -83,7 +86,8 @@ def delete_category(category_id):
         click.echo(click.style(f"Status code: {response.status_code}", fg='red'))
         click.echo(json.dumps(obj=response.json(),
                               indent=2,
-                              sort_keys=True))
+                              sort_keys=True,
+                              ensure_ascii=False))
 
 
 category.add_command(change_category)
