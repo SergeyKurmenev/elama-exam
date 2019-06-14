@@ -19,7 +19,8 @@ def get_statistic():
 
     click.echo(json.dumps(obj=response.json(),
                           indent=2,
-                          sort_keys=True))
+                          sort_keys=True,
+                          ensure_ascii=False))
 
 
 statistic.add_command(get_statistic)
