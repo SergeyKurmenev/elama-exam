@@ -9,8 +9,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from blog import db
 
 from blog.models import Category
-from blog.models import Post
 from blog.models import Comment
+from blog.models import Post
 
 categories_count = 5
 
