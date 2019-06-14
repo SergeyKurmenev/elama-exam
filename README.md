@@ -50,6 +50,51 @@ python runserver.py
 
 Для остановки использовать `CTRL+C`.
 
+---
+
+### CLI:
+
+Взаимодействие с `api` возможно с помощью `CLI`.
+Запуск осуществляется с помошью комманды из корневой папки проекта:
+```bash
+python cli/<Название тестируемой части>.py
+```
+Тестируемые части:
+* category
+  
+  команды:
+  * change-category
+  * delete-category
+  * get-categories
+  * make-category
+  
+* comment
+  
+  команды:
+  * get-comments
+  * make-comment
+
+* post  
+
+  команды:
+  * change-tag
+  * delete-posts
+  * get-all-posts
+  * make-post
+
+* statistic
+  
+  команды:
+  * get-statistic
+  
+Что бы посмотреть опции комманды необходимо 
+выполнить комманду с опцией `--help`. 
+
+Пример:
+```bash
+python cli/post.py delete-posts --help
+```
+
 ### Скрипт для полной сборки приложения
 
 Скрипт объединяет в себе создание БД, скрипт создания виртуального окружения, 
