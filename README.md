@@ -11,6 +11,7 @@
 Она доступна после запуска приложения по ссылкам:
 
 - [В виде HTML](http://localhost:5000/api/spec.html#!/spec)
+  - в html форме реализована возможность запросов к `api`.
 
 - [В виде JSON](http://localhost:5000/api/spec.json)
 
