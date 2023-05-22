@@ -6,5 +6,5 @@ Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.0
 loguru==0.2.5
 psycopg2-binary==2.8.2
-requests==2.22.0
+requests==2.31.0
 
